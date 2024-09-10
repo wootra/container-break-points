@@ -11,6 +11,9 @@ importers:
       container-breakpoints:
         specifier: link:..
         version: link:..
+      container-breakpoints-react:
+        specifier: file:container-breakpoints-react-0.1.0.tgz
+        version: file:container-breakpoints-react-0.1.0.tgz(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       react:
         specifier: ^18.3.1
         version: 18.3.1
@@ -594,6 +597,13 @@ packages:
 
   concat-map@0.0.1:
     resolution: {integrity: sha512-/Srv4dswyQNBfohGpz9o6Yb3Gz3SrUDqBH5rTuhGR7ahtlbYKnVxw2bCFMRljaA7EXHaXZ8wsHdodFvbkhKmqg==}
+
+  container-breakpoints-react@file:container-breakpoints-react-0.1.0.tgz:
+    resolution: {integrity: sha512-/NO9WWl2ggOV6V0wAgYeYAVZktMDKlouBZq+9He1ue3HQgEBmgbTld2KqAsKUa11TBD0JPOBNhHqQQ21sJJpRQ==, tarball: file:container-breakpoints-react-0.1.0.tgz}
+    version: 0.1.0
+    peerDependencies:
+      react: ^18
+      react-dom: ^18
 
   convert-source-map@2.0.0:
     resolution: {integrity: sha512-Kvp459HrV2FEJ1CAsi1Ku+MY3kasH19TFykTz2xWmMeq6bk2NU3XXvfJ+Q61m0xktWwt+1HSYf3JZsTms3aRJg==}
@@ -1597,6 +1607,11 @@ snapshots:
   color-name@1.1.4: {}
 
   concat-map@0.0.1: {}
+
+  container-breakpoints-react@file:container-breakpoints-react-0.1.0.tgz(react-dom@18.3.1(react@18.3.1))(react@18.3.1):
+    dependencies:
+      react: 18.3.1
+      react-dom: 18.3.1(react@18.3.1)
 
   convert-source-map@2.0.0: {}
 

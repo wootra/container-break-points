@@ -1,5 +1,5 @@
 {
-	"name": "container-breakpoints",
+	"name": "container-breakpoints-react",
 	"version": "0.1.0",
 	"private": false,
 	"exports": {
@@ -63,7 +63,8 @@
 		"breakpoints",
 		"react",
 		"container-breakpoints",
-		"container-break-points"
+		"container-break-points",
+		"container-breakpoints-react"
 	],
 	"size-limit": [
 		{

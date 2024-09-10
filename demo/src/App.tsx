@@ -1,4 +1,4 @@
-import { BreakAreaProvider, BreakPointContainer, useBreakAreaAt } from 'container-breakpoints';
+import { BreakAreaProvider, BreakPointContainer, useBreakAreaAt } from 'container-breakpoints-react';
 import { containerBreakpoints } from './consts';
 import './App.css';
 
