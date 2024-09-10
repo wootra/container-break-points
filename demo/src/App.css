@@ -1,13 +1,19 @@
-.card-holder {
+#root {
+	width: 100%;
+}
+
+.card-holder,
+.card-holder2 {
 	display: flex;
 	justify-content: space-between;
 	flex-wrap: wrap;
+	width: 100%;
 }
 
 .card {
 	display: flex;
 	flex-direction: column;
-	flex: 1;
+	flex: 1 1 25%;
 	&.double {
 		flex: 2;
 	}

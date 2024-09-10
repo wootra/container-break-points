@@ -14,7 +14,7 @@ And This library started from there.
 ## Concept 
 
 Let's say we have a scroll area (the blue area in the picture). In the big screen, 
-It will be on the right side splitting the width of the screen. There is also margin area(gray) which is not included as window size.
+It will be on the right side splitting the width of the screen. There is also margin area(gray) which is not included as container's size.
 
 ![big-screen](big-screen.png)
 
@@ -22,7 +22,7 @@ Now let's make screen size smaller. But with our responsive design, the blue are
 
 ![small-screen](small-screen.png)
 
-If we are using just width size and break points relative to the screen, your code will become difficult to read and manage.
+If we are controlling the size of the component based on the window's size, your code will easily become difficult to read and manage.
 
 ## Architecture
 

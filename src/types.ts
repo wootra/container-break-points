@@ -1,9 +1,3 @@
-export type BreakAreaStates<T extends string> = Record<
-	T,
-	{
-		current: string;
-		breakAreas: string[];
-		breakPoints: number[];
-		isInit: boolean;
-	}
->;
+export type BreakAreaStates<T extends string> = Record<T, string>;
+
+export type BreakAreaInfo = { breakSizes: number[]; breakAreas: string[] };

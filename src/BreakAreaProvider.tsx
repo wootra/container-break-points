@@ -1,12 +1,13 @@
 import { MutableRefObject, PropsWithChildren, createContext, useCallback, useMemo, useReducer, useRef } from 'react';
-import type { BreakAreaStates } from './types';
+import type { BreakAreaInfo, BreakAreaStates } from './types';
 import { UPDATE_BREAK_AREA } from './consts';
 import { getMsgOwnerId } from './utils';
 
-type BreakAreaInfo = { breakSizes: number[]; breakAreas: string[] };
 type ContextState = {
 	setBreakArea: (id: string, width: number) => void;
 	dataRef: MutableRefObject<BreakAreaStates<string>>;
+	breakPointsRef: MutableRefObject<Readonly<Record<string, BreakAreaInfo>>>;
+	providerId: MutableRefObject<string>;
 };
 
 export const BreakAreaContext = createContext<ContextState>({} as ContextState);
@@ -22,30 +23,31 @@ const getCurrBreakArea = (breakSizes: number[], breakAreas: string[], width: num
 	return breakAreas[idx];
 };
 
-const BreakAreaProvider = <T extends string>({
+const BreakAreaProvider = ({
 	breakPoints,
 	children,
-}: PropsWithChildren<{ breakPoints: Readonly<Record<T, BreakAreaInfo>> }>) => {
-	const dataRef = useRef({}) as MutableRefObject<BreakAreaStates<T>>;
-	const setBreakArea = useCallback((id: T, width: number) => {
+}: PropsWithChildren<{ breakPoints: Readonly<Record<string, BreakAreaInfo>> }>) => {
+	const dataRef = useRef({}) as MutableRefObject<BreakAreaStates<string>>;
+	const breakPointsRef = useRef(breakPoints);
+	breakPointsRef.current = breakPoints;
+
+	const providerId = useRef(Math.random().toString(36).substring(2, 15));
+	const setBreakArea = useCallback((id: string, width: number) => {
 		const obj = breakPoints[id];
 		const _breakAreas = obj.breakAreas;
 		const _breakSizes = obj.breakSizes;
 		const current = getCurrBreakArea(_breakSizes, _breakAreas, width);
-		if (current && (!dataRef.current[id] || current !== dataRef.current[id]?.current)) {
+		if (current && (!dataRef.current[id] || current !== dataRef.current[id])) {
 			dataRef.current = {
 				...dataRef.current,
-				[id]: {
-					...dataRef.current[id],
-					current,
-					isInit: true,
-				},
+				[id]: current,
 			};
 			const msgId = getMsgOwnerId(id);
 			window.dispatchEvent(
 				new CustomEvent(UPDATE_BREAK_AREA, {
 					detail: {
 						id: msgId,
+						providerId: providerId.current,
 						current,
 					},
 				})
@@ -53,9 +55,9 @@ const BreakAreaProvider = <T extends string>({
 		}
 	}, []);
 
-	const value = useMemo(() => ({ setBreakArea, dataRef }), [setBreakArea]);
+	const value = useMemo(() => ({ setBreakArea, dataRef, breakPointsRef, providerId }), [setBreakArea]);
 
-	return <BreakAreaContext.Provider value={value as ContextState}>{children}</BreakAreaContext.Provider>;
+	return <BreakAreaContext.Provider value={value}>{children}</BreakAreaContext.Provider>;
 };
 
 export { BreakAreaProvider };
