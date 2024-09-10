@@ -1,0 +1,24 @@
+.card-holder {
+	display: flex;
+	justify-content: space-between;
+	flex-wrap: wrap;
+}
+
+.card {
+	display: flex;
+	flex-direction: column;
+	flex: 1;
+	&.double {
+		flex: 2;
+	}
+
+	> * {
+		flex: 1;
+	}
+	> h1 {
+		font-size: 2rem;
+		font-weight: 700;
+		margin-bottom: 1rem;
+		flex: 2;
+	}
+}
