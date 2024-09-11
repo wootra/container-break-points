@@ -1,4 +1,4 @@
-# container-breakpoints
+# container-breakpoints-react
 
 In the concept of responsive design, we use @media queries. 
 when the screen size is changed, the UI layout or contents can be changed.
@@ -47,7 +47,9 @@ In container-breakpoints, we need 4 symbols for 3 breakpoints. ex> xs, sm, md, l
 It automatically maps from 0-319, 320-767, 768-1023, 1024-infinity.
 In this way, we will have a single name for the each boundary.
 
-To manage multiple areas, you will call a simple hook and it will provide you helper functions.
+## Use useBreakAreaInfo hook for the basic-easy usage.
+
+To manage multiple areas, you will call a simple hook and it will provide you helper functions. [Demo Code](https://github.com/wootra/container-break-points/blob/main/demo/src/routes/SimpleExample/ProviderWrapper.tsx)
 
 ```
 import { useBreakAreaInfo } from 'container-breakpoints-react';
@@ -62,16 +64,17 @@ const {
 } = useBreakAreaInfo(id);
 
 ```
-You will it renders only when breakpoint is changed. here is the example code.
+You will see that it ONLY renders only when breakpoint is changed. container-breakpoints-react library uses CustomEvent internally, So context will not trigger expand amount of rendering. It is FAST!!
 
-but 
+## Use multiple hooks for more fine grained control.
 
-For the multiple area, container-breakpoints will provide multiple utility hooks. (all of them returns boolean)
+useBreakAreaInfo will allow you to control optional rendering based on the container's size change. It is fast enough, but if you want to control even more fine grained, you can choose one of these hooks instead of using embedded helper functions from useBreakAreaInfo hook.
+(all of them returns `boolean` type)
 
 | hook name | args | description |
 | -------------- | --- | -- |
-| useBreakAreaInfo | id:string | is it at the breakArea? |
-| useBreakAreasBetween | id:string, from:string, to:string | is the breakArea from ~ to? (including from & to) |
+| useBreakAreaAt | id:string | is the breakArea exactly matching? |
+| useBreakAreasBetween | id:string, from:string, to:string | is the breakArea in from-to boundary? (including from&to) |
 | useBreakAreasUp | id:string, from:string | is the breakArea bigger or equal to from area? |
 | useBreakAreasDown | id:string, from:string | is the breakArea smaller or equal to from area? |
 
@@ -92,6 +95,33 @@ export const containerBreakpoints = Object.freeze({
         breakAreas: ['small-banner', 'medium-banner', 'big-banner'] as const,
     }
 });
-export type Container = keyof typeof containerBreakpoints;
-export type ContainerBreakpoint = (typeof containerBreakpoints)[Container];
+export type BreakPointOptions = typeof containerBreakpoints;
 ```
+
+## Typescript support
+
+container-breakpoints-react library is written in typescript. It also reflect your own config object like `containerBreakpoints` above.
+Then `container-breakpoints-react` will auto-MAGICALLY know which arguments are possible.
+
+```typescript
+const { current, data: breakPtInfo, isBreakAt } = useBreakAreaInfo<BreakPointsOptions>('container1');
+```
+
+Look at the above code. The type `BreakPointsOptions` is defined [here](https://github.com/wootra/container-break-points/blob/main/demo/src/routes/SimpleExample/consts.ts) and you will see `container1` auto-completed.
+
+![auto-complete-in-hook](auto-complete-in-hook.png)
+
+You can also see auto-complete in the individual helper functions.
+
+![auto-complete-in-helper](auto-complete-in-helper.png)
+
+## Multi provider support
+
+You can make multiple providers with different breakPoint definitions.
+`container-breakpoints-react` will manage individual provider's id automatically, so they will not conflict with each other.
+
+This is useful when you have multiple different pages using client-side router.
+
+## NOTE
+
+This library is using CustomEvent internally. Also, it leans on memoizations such as useRef, useMemo, useCallback, and useState. 
