@@ -1,0 +1,82 @@
+.providerWrapper {
+	display: grid;
+	grid-template-columns: 300px 1fr;
+	max-width: 1024px;
+	width: 100%;
+	margin: 0 auto;
+}
+
+.leftArea {
+	background-color: #61aadb;
+}
+
+.resizeArea {
+	background-color: white;
+	display: flex;
+	flex-direction: column;
+	gap: 1rem;
+}
+
+.situationHolder {
+	display: flex;
+	flex-direction: column;
+	gap: 0.5rem;
+	border: 1px solid #7e7e7e;
+	border-radius: 1rem;
+}
+
+.infoBox {
+	display: flex;
+	flex-direction: column;
+	gap: 0.5rem;
+	padding: 1rem;
+	border-radius: 1rem;
+	background-color: #f5f5f5;
+	border: 1px solid #7e7e7e;
+}
+
+.situationTitle {
+	display: flex;
+	flex-direction: column;
+}
+
+.cardGroup {
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+	flex-wrap: wrap;
+	width: 100%;
+}
+
+.xsEnabled,
+.smEnabled,
+.mdEnabled,
+.lgEnabled,
+.xlEnabled {
+	width: 2rem;
+	height: 2rem;
+	border-radius: 50%;
+	border: 1px solid #7e7e7e;
+	display: grid;
+	place-content: center;
+}
+
+.xsEnabled {
+	background-color: antiquewhite;
+}
+
+.smEnabled {
+	background-color: #ffdaa9;
+}
+
+.mdEnabled {
+	background-color: #d0f4ae;
+}
+
+.lgEnabled {
+	background-color: #61aadb;
+}
+
+.xlEnabled {
+	background-color: #eba9ff;
+}

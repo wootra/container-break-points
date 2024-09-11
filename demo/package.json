@@ -10,10 +10,10 @@
 		"preview": "vite preview"
 	},
 	"dependencies": {
-		"container-breakpoints": "link:..",
-		"container-breakpoints-react": "file:container-breakpoints-react-0.1.0.tgz",
+		"container-breakpoints-react": "link:..",
 		"react": "^18.3.1",
-		"react-dom": "^18.3.1"
+		"react-dom": "^18.3.1",
+		"react-router-dom": "^6.26.2"
 	},
 	"devDependencies": {
 		"@eslint/js": "^9.9.0",

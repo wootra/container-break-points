@@ -1,15 +1,31 @@
-import { useContext, useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
 import { UPDATE_BREAK_AREA } from './consts';
-import { BreakAreaContext } from './BreakAreaProvider';
+import { BreakAreaContext, ContextState } from './BreakAreaProvider';
 import { getMsgOwnerId } from './utils';
-import { BreakAreaInfo } from './types';
+import { BreakPtObj } from './types';
 
-export const useBreakAreaInfo = (id: string) => {
-	const { breakPointsRef, providerId } = useContext(BreakAreaContext);
-	const [data, setData] = useState<BreakAreaInfo>({ breakAreas: [], breakSizes: [] } as BreakAreaInfo);
-	const msgId = useMemo(() => getMsgOwnerId(id), [id]);
+const a = Object.freeze({
+	test: {
+		breakAreas: ['aa', 'bb', 'cc'] as const,
+		breakSizes: [100, 200] as const,
+	},
+});
+
+export const useBreakAreaInfo = <
+	T,
+	U extends BreakPtObj<T> = BreakPtObj<T>,
+	AREA extends U[keyof U]['breakAreas'][number] = U[keyof U]['breakAreas'][number]
+>(
+	id: keyof U
+) => {
+	const { breakPointsRef, providerId } = useContext(BreakAreaContext) as ContextState<U>;
+	const [data, setData] = useState({ breakAreas: [], breakSizes: [] } as unknown as U[keyof U]);
+	const [current, setCurrent] = useState<string>('');
+	const msgId = useMemo(() => getMsgOwnerId(id as string), [id]);
 	const dataRef = useRef(data);
-	const savedDataRef = useRef(data);
+	const savedCurrRef = useRef('');
+	savedCurrRef.current = current;
+	const savedDataRef = useRef<U[keyof U]>(data);
 	dataRef.current = data;
 
 	useEffect(() => {
@@ -28,6 +44,9 @@ export const useBreakAreaInfo = (id: string) => {
 					savedDataRef.current = breakPointsRef.current[id];
 					setData(breakPointsRef.current[id]);
 				}
+				if (ev.detail.current !== savedCurrRef.current) {
+					setCurrent(ev.detail.current);
+				}
 			}
 		};
 		window.addEventListener(UPDATE_BREAK_AREA, listener);
@@ -36,5 +55,71 @@ export const useBreakAreaInfo = (id: string) => {
 		};
 	}, [msgId]);
 
-	return data;
+	const isBreakAt = useCallback(
+		(at: AREA) => {
+			const breakAreas = breakPointsRef.current?.[id]?.breakAreas ?? [];
+			if (!breakAreas.includes(at)) {
+				console.error('breakArea in the argument is wrong. it should be one of ', breakAreas);
+				return false;
+			}
+			return current === at;
+		},
+		[current, id]
+	);
+
+	const isBreakBetween = useCallback(
+		(from: AREA, to: AREA) => {
+			const breakAreas = breakPointsRef.current?.[id]?.breakAreas ?? [];
+			let startIdx = breakAreas.indexOf(from);
+			let endIdx = breakAreas.indexOf(to);
+
+			if (startIdx === -1) {
+				console.error('from argument on useBreakAreaBetween is invalid. it should be one of ', breakAreas);
+				return false;
+			}
+			if (endIdx === -1) {
+				console.error('to argument on useBreakAreaBetween is invalid. it should be one of ', breakAreas);
+				return false;
+			}
+
+			if (startIdx > endIdx) {
+				// swap
+				const temp = startIdx;
+				startIdx = endIdx;
+				endIdx = temp;
+			}
+			const currIdx = breakAreas.indexOf(current);
+			return currIdx >= startIdx && currIdx <= endIdx;
+		},
+		[id, current]
+	);
+
+	const isBreakUp = useCallback(
+		(from: AREA) => {
+			const breakAreas = breakPointsRef.current?.[id]?.breakAreas ?? [];
+			const startIdx = breakAreas.indexOf(from);
+			if (startIdx === -1) {
+				console.error('from argument on useBreakAreasDown is invalid. it should be one of ', breakAreas);
+				return false;
+			}
+			const currIdx = breakAreas.indexOf(current);
+			return currIdx >= startIdx;
+		},
+		[id, current]
+	);
+
+	const isBreakDown = useCallback(
+		(from: AREA) => {
+			const breakAreas = breakPointsRef.current?.[id]?.breakAreas ?? [];
+			let startIdx = breakAreas.indexOf(from);
+			if (startIdx === -1) {
+				console.error('from argument on useBreakAreasDown is invalid. it should be one of ', breakAreas);
+				return false;
+			}
+			const currIdx = breakAreas.indexOf(current);
+			return currIdx <= startIdx;
+		},
+		[id, current]
+	);
+	return { data, current, isBreakAt, isBreakBetween, isBreakUp, isBreakDown };
 };

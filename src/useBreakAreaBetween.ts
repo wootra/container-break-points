@@ -1,13 +1,21 @@
 import { useCallback } from 'react';
 
 import { useBreakAreaCommon, TriggerFunc } from './useBreakAreaCommon';
-import { BreakAreaInfo } from './types';
+import { BreakArea, BreakPtObj } from './types';
 
-export const useBreakAreaBetween = (id: string, from: string, to: string) => {
-	const triggerFunc: TriggerFunc = useCallback(
-		(current: string, breakAreas: BreakAreaInfo['breakAreas']) => {
-			let startIdx = breakAreas.indexOf(from);
-			let endIdx = breakAreas.indexOf(to);
+export const useBreakAreaBetween = <
+	T,
+	U extends BreakPtObj<T> = BreakPtObj<T>,
+	AREA extends BreakArea<T> = BreakArea<T>
+>(
+	id: keyof U,
+	from: AREA,
+	to: AREA
+) => {
+	const triggerFunc: TriggerFunc<T> = useCallback(
+		(current, breakAreas) => {
+			let startIdx = breakAreas.indexOf(from as string);
+			let endIdx = breakAreas.indexOf(to as string);
 
 			if (startIdx === -1) {
 				console.error('from argument on useBreakAreaBetween is invalid. it should be one of ', breakAreas);

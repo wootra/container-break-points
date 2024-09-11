@@ -46,11 +46,31 @@ Then technically your break points boundary will be 4, not 3.
 In container-breakpoints, we need 4 symbols for 3 breakpoints. ex> xs, sm, md, lg.
 It automatically maps from 0-319, 320-767, 768-1023, 1024-infinity.
 In this way, we will have a single name for the each boundary.
+
+To manage multiple areas, you will call a simple hook and it will provide you helper functions.
+
+```
+import { useBreakAreaInfo } from 'container-breakpoints-react';
+...
+const {
+    current, // returns your break area name. i.e. 'sm'|'md'|'lg'...
+    data: breakPtInfo, // returns break point info that is assigned to the provider. only for the specific id.
+    isBreakAt, // helper function that returns boolean for exact match
+    isBreakBetween, // helper function that returns boolean for range match
+    isBreakDown, // helper function that returns match or smaller area
+    isBreakUp, // helper function that returns match or bigger area
+} = useBreakAreaInfo(id);
+
+```
+You will it renders only when breakpoint is changed. here is the example code.
+
+but 
+
 For the multiple area, container-breakpoints will provide multiple utility hooks. (all of them returns boolean)
 
 | hook name | args | description |
 | -------------- | --- | -- |
-| useBreakAreaAt | id:string, breakArea:string | is it at the breakArea? |
+| useBreakAreaInfo | id:string | is it at the breakArea? |
 | useBreakAreasBetween | id:string, from:string, to:string | is the breakArea from ~ to? (including from & to) |
 | useBreakAreasUp | id:string, from:string | is the breakArea bigger or equal to from area? |
 | useBreakAreasDown | id:string, from:string | is the breakArea smaller or equal to from area? |
@@ -61,15 +81,15 @@ As you see the argument, the hook need the id of the container. You can keep a c
 export const containerBreakpoints = Object.freeze({
     main: {
         breakSizes: [320, 768, 1024],
-        breakAreas: ['xs', 'sm', 'md', 'lg'],
+        breakAreas: ['xs', 'sm', 'md', 'lg'] as const,
     },
     card: {
         breakSizes: [150],
-        breakAreas: ['small-card', 'big-card'],
+        breakAreas: ['small-card', 'big-card'] as const,
     },
     banner: {
         breakSizes: [320, 768],
-        breakAreas: ['small-banner', 'medium-banner', 'big-banner'],
+        breakAreas: ['small-banner', 'medium-banner', 'big-banner'] as const,
     }
 });
 export type Container = keyof typeof containerBreakpoints;

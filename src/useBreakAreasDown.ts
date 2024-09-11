@@ -1,11 +1,14 @@
 import { useCallback } from 'react';
 
 import { useBreakAreaCommon, TriggerFunc } from './useBreakAreaCommon';
-import { BreakAreaInfo } from './types';
+import { BreakArea, BreakPtObj } from './types';
 
-export const useBreakAreasDown = (id: string, from: string) => {
-	const triggerFunc: TriggerFunc = useCallback(
-		(current: string, breakAreas: BreakAreaInfo['breakAreas']) => {
+export const useBreakAreasDown = <T, U extends BreakPtObj<T> = BreakPtObj<T>, AREA extends BreakArea<T> = BreakArea<T>>(
+	id: string,
+	from: string
+) => {
+	const triggerFunc: TriggerFunc<U> = useCallback(
+		(current, breakAreas) => {
 			let startIdx = breakAreas.indexOf(from);
 			if (startIdx === -1) {
 				console.error('from argument on useBreakAreasDown is invalid. it should be one of ', breakAreas);

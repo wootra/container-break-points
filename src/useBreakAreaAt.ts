@@ -1,10 +1,10 @@
 import { useCallback } from 'react';
 
 import { useBreakAreaCommon, TriggerFunc } from './useBreakAreaCommon';
-import { BreakAreaInfo } from './types';
+import { BreakPtObj } from './types';
 
-export const useBreakAreaAt = (id: string, breakArea: string) => {
-	const triggerFunc: TriggerFunc = useCallback((current: string, breakAreas: BreakAreaInfo['breakAreas']) => {
+export const useBreakAreaAt = <T, U extends BreakPtObj<T> = BreakPtObj<T>>(id: string, breakArea: string) => {
+	const triggerFunc: TriggerFunc<U> = useCallback((current, breakAreas) => {
 		if (!breakAreas.includes(breakArea)) {
 			console.error('breakArea in the argument is wrong. it should be one of ', breakAreas);
 			return false;

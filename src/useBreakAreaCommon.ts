@@ -1,14 +1,17 @@
 import { useContext, useEffect, useMemo, useRef, useState } from 'react';
 import { UPDATE_BREAK_AREA } from './consts';
-import { BreakAreaContext } from './BreakAreaProvider';
+import { BreakAreaContext, ContextState } from './BreakAreaProvider';
 import { getMsgOwnerId } from './utils';
-import { BreakAreaInfo } from './types';
-export type TriggerFunc = (current: string, breakAreas: BreakAreaInfo['breakAreas']) => boolean;
+import { BreakArea, BreakAreaInfo, BreakPtObj } from './types';
+export type TriggerFunc<T> = (current: BreakArea<T>, breakAreas: BreakAreaInfo<T>['breakAreas']) => boolean;
 
-export const useBreakAreaCommon = (id: string, triggerFunc: TriggerFunc) => {
-	const { breakPointsRef, providerId } = useContext(BreakAreaContext);
+export const useBreakAreaCommon = <T, U extends BreakPtObj<T> = BreakPtObj<T>>(
+	id: keyof U,
+	triggerFunc: TriggerFunc<T>
+) => {
+	const { breakPointsRef, providerId } = useContext(BreakAreaContext) as ContextState<U>;
 	const [isInBoundary, setInBoundary] = useState<boolean | null>(null);
-	const msgId = useMemo(() => getMsgOwnerId(id), [id]);
+	const msgId = useMemo(() => getMsgOwnerId(id as string), [id]);
 	const isInBoundaryRef = useRef(isInBoundary);
 	isInBoundaryRef.current = isInBoundary;
 	useEffect(() => {
