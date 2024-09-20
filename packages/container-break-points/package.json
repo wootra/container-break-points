@@ -48,6 +48,8 @@
 		"size-limit": "^11.1.5",
 		"tslib": "^2.6.3",
 		"tsup": "^8.3.0",
+		"@repo/eslint-config": "workspace:*",
+		"@repo/typescript-config": "workspace:*",
 		"typescript": "^5.5.4"
 	},
 	"peerDependencies": {

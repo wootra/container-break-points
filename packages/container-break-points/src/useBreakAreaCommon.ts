@@ -9,7 +9,7 @@ export const useBreakAreaCommon = <T, U extends BreakPtObj<T> = BreakPtObj<T>>(
 	id: keyof U,
 	triggerFunc: TriggerFunc<T>
 ) => {
-	const { breakPointsRef, providerId } = useContext(BreakAreaContext) as ContextState<U>;
+	const { breakPointsRef, providerId, dataRef } = useContext(BreakAreaContext) as ContextState<U>;
 	const [isInBoundary, setInBoundary] = useState<boolean | null>(null);
 	const msgId = useMemo(() => getMsgOwnerId(id as string), [id]);
 	const isInBoundaryRef = useRef(isInBoundary);
@@ -28,6 +28,11 @@ export const useBreakAreaCommon = <T, U extends BreakPtObj<T> = BreakPtObj<T>>(
 				}
 			}
 		};
+		const newVal = triggerFunc(dataRef.current[id as string], breakPointsRef.current[id].breakAreas); // === breakArea;
+		if (isInBoundaryRef.current !== newVal) {
+			setTimeout(() => setInBoundary(newVal)); // use event queue to remove race condition.
+		}
+
 		window.addEventListener(UPDATE_BREAK_AREA, listener);
 		return () => {
 			window.removeEventListener(UPDATE_BREAK_AREA, listener);

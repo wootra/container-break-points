@@ -14,24 +14,27 @@ const a = Object.freeze({
 export const useBreakAreaInfo = <
 	T,
 	U extends BreakPtObj<T> = BreakPtObj<T>,
-	AREA extends U[keyof U]['breakAreas'][number] = U[keyof U]['breakAreas'][number]
+	AREA extends U[keyof U]['breakAreas'][number] = U[keyof U]['breakAreas'][number],
 >(
 	id: keyof U
 ) => {
-	const { breakPointsRef, providerId } = useContext(BreakAreaContext) as ContextState<U>;
+	const { breakPointsRef, providerId, dataRef } = useContext(BreakAreaContext) as ContextState<U>;
 	const [data, setData] = useState({ breakAreas: [], breakSizes: [] } as unknown as U[keyof U]);
 	const [current, setCurrent] = useState<string>('');
 	const msgId = useMemo(() => getMsgOwnerId(id as string), [id]);
-	const dataRef = useRef(data);
+	// const dataRef = useRef(data);
 	const savedCurrRef = useRef('');
 	savedCurrRef.current = current;
 	const savedDataRef = useRef<U[keyof U]>(data);
-	dataRef.current = data;
+	// dataRef.current = data;
 
 	useEffect(() => {
 		if (breakPointsRef.current) {
 			savedDataRef.current = breakPointsRef.current[id];
 			setData(breakPointsRef.current[id]);
+		}
+		if (dataRef.current?.[id as string]) {
+			setCurrent(dataRef.current[id as string]);
 		}
 		const listener: EventListenerOrEventListenerObject = e => {
 			const ev = e as CustomEvent;
