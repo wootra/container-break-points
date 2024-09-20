@@ -1,0 +1,31 @@
+.container {
+	display: grid;
+	grid-template-columns: auto;
+	grid-template-rows: auto;
+	width: 100vw;
+	height: auto;
+	background: gray;
+	position: relative;
+}
+
+.wrapper {
+	display: flex;
+	margin-inline: auto;
+	width: calc(100% - 2rem);
+	height: auto;
+	max-width: calc(800px - 2rem);
+	background-color: white;
+	border-radius: 1rem;
+	padding: 1rem;
+	box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+}
+
+.controlBox {
+	position: absolute;
+	right: 1rem;
+	width: 300px;
+	top: 5rem;
+	min-height: 100px;
+	height: auto;
+	background: #a1b0a1;
+}

@@ -1,0 +1,17 @@
+.nav {
+	display: grid;
+	grid-template-columns: repeat(1fr);
+	align-items: center;
+	background-color: #bbc197;
+	padding: 10px;
+	a {
+		grid-row: 1/2;
+		/* max-width: 100px; */
+		word-break: keep-all;
+		white-space: nowrap;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		width: 100%;
+	}
+}
