@@ -173,11 +173,11 @@ const CarouselItem = ({ children, title }: PropsWithChildren<{ title: string }>)
 };
 ```
 
-![demo]([my_video.mov](https://github.com/wootra/container-break-points/blob/main/packages/container-break-points)/breakpoint-demo.mp4?raw=true)
+![demo](https://github.com/wootra/container-break-points/blob/main/packages/container-break-points/breakpoint-demo.mp4?raw=true)
 
 
 <video width="320" height="240" controls>
-  <source src="https://github.com/wootra/container-break-points/blob/main/packages/container-break-points)/breakpoint-demo.mp4?raw=true" type="video/mp4">
+  <source src="https://github.com/wootra/container-break-points/blob/main/packages/container-break-points/breakpoint-demo.mp4?raw=true" type="video/mp4">
 </video>
 
 ## Typescript support
