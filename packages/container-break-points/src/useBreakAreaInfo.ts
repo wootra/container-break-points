@@ -1,32 +1,24 @@
 import { useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
 import { UPDATE_BREAK_AREA } from './consts';
-import { BreakAreaContext, ContextState } from './BreakAreaProvider';
+import { getBreakAreaContext } from './BreakAreaProvider';
 import { getMsgOwnerId } from './utils';
-import { BreakPtObj } from './types';
-
-const a = Object.freeze({
-	test: {
-		breakAreas: ['aa', 'bb', 'cc'] as const,
-		breakSizes: [100, 200] as const,
-	},
-});
+import { BreakAreaInfo, BreakPointSatisfyObj, BreakPtObj, BreakArea } from './types';
 
 export const useBreakAreaInfo = <
-	T,
+	T extends BreakPointSatisfyObj = BreakPointSatisfyObj,
 	U extends BreakPtObj<T> = BreakPtObj<T>,
-	AREA extends U[keyof U]['breakAreas'][number] = U[keyof U]['breakAreas'][number],
+	K extends keyof U = keyof U,
+	AREA extends BreakArea<T, U, K> = BreakArea<T, U, K>,
 >(
-	id: keyof U
+	id: K
 ) => {
-	const { breakPointsRef, providerId, dataRef } = useContext(BreakAreaContext) as ContextState<U>;
-	const [data, setData] = useState({ breakAreas: [], breakSizes: [] } as unknown as U[keyof U]);
+	const { breakPointsRef, providerId, dataRef } = useContext(getBreakAreaContext<T, U, K>());
+	const [data, setData] = useState({ breakAreas: [], breakSizes: [] } as unknown as BreakAreaInfo<T, U, K>);
 	const [current, setCurrent] = useState<string>('');
 	const msgId = useMemo(() => getMsgOwnerId(id as string), [id]);
-	// const dataRef = useRef(data);
 	const savedCurrRef = useRef('');
 	savedCurrRef.current = current;
-	const savedDataRef = useRef<U[keyof U]>(data);
-	// dataRef.current = data;
+	const savedDataRef = useRef<BreakAreaInfo<T, U, K>>(data);
 
 	useEffect(() => {
 		if (breakPointsRef.current) {
@@ -38,11 +30,7 @@ export const useBreakAreaInfo = <
 		}
 		const listener: EventListenerOrEventListenerObject = e => {
 			const ev = e as CustomEvent;
-			if (
-				ev.type === UPDATE_BREAK_AREA &&
-				ev.detail.id === msgId &&
-				ev.detail.providerId === providerId.current
-			) {
+			if (ev.type === UPDATE_BREAK_AREA && ev.detail.id === msgId && ev.detail.providerId === providerId) {
 				if (breakPointsRef.current?.[id] !== savedDataRef.current) {
 					savedDataRef.current = breakPointsRef.current[id];
 					setData(breakPointsRef.current[id]);

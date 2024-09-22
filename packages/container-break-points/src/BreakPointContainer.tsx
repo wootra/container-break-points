@@ -1,12 +1,17 @@
-import React, { PropsWithChildren, useContext, useEffect, useRef } from 'react';
-import { BreakAreaContext } from './BreakAreaProvider';
-type Props = {
+import { PropsWithChildren, useContext, useEffect, useRef } from 'react';
+import { getBreakAreaContext } from './BreakAreaProvider';
+import { BreakPointSatisfyObj, BreakPtObj } from './types';
+type Props<T extends BreakPointSatisfyObj = BreakPointSatisfyObj, U extends BreakPtObj<T> = BreakPtObj<T>> = {
 	className?: string;
-	id: string;
+	id: keyof U;
 };
-const BreakPointContainer = ({ id, className, children }: PropsWithChildren<Props>) => {
+const BreakPointContainer = <T extends BreakPointSatisfyObj = BreakPointSatisfyObj>({
+	id,
+	className,
+	children,
+}: PropsWithChildren<Props<T>>) => {
 	const containerRef = useRef<HTMLDivElement>(null);
-	const { setBreakArea } = useContext(BreakAreaContext);
+	const { setBreakArea } = useContext(getBreakAreaContext<T>());
 	useEffect(() => {
 		const resizeObserver = new ResizeObserver(entries => {
 			for (const entry of entries) {
@@ -23,7 +28,7 @@ const BreakPointContainer = ({ id, className, children }: PropsWithChildren<Prop
 		};
 	}, []);
 	return (
-		<div className={`${className} break-point-container-${id}`} ref={containerRef}>
+		<div className={`${className} break-point-container-${id as string}`} ref={containerRef}>
 			{children}
 		</div>
 	);

@@ -1,34 +1,33 @@
 import { useContext, useEffect, useMemo, useRef, useState } from 'react';
 import { UPDATE_BREAK_AREA } from './consts';
-import { BreakAreaContext, ContextState } from './BreakAreaProvider';
+import { getBreakAreaContext } from './BreakAreaProvider';
 import { getMsgOwnerId } from './utils';
-import { BreakArea, BreakAreaInfo, BreakPtObj } from './types';
-export type TriggerFunc<T> = (current: BreakArea<T>, breakAreas: BreakAreaInfo<T>['breakAreas']) => boolean;
+import { BreakPointChangeEventData, BreakPointSatisfyObj, BreakPtObj, TriggerFunc } from './types';
 
-export const useBreakAreaCommon = <T, U extends BreakPtObj<T> = BreakPtObj<T>>(
-	id: keyof U,
-	triggerFunc: TriggerFunc<T>
+export const useBreakAreaCommon = <
+	T extends BreakPointSatisfyObj = BreakPointSatisfyObj,
+	U extends BreakPtObj<T> = BreakPtObj<T>,
+	K extends keyof U = keyof U,
+>(
+	id: K,
+	triggerFunc: TriggerFunc<T, U, K>
 ) => {
-	const { breakPointsRef, providerId, dataRef } = useContext(BreakAreaContext) as ContextState<U>;
+	const { breakPointsRef, providerId, dataRef } = useContext(getBreakAreaContext<T, U, K>());
 	const [isInBoundary, setInBoundary] = useState<boolean | null>(null);
-	const msgId = useMemo(() => getMsgOwnerId(id as string), [id]);
+	const msgId = useMemo(() => getMsgOwnerId<T, U>(id), [id]);
 	const isInBoundaryRef = useRef(isInBoundary);
 	isInBoundaryRef.current = isInBoundary;
 	useEffect(() => {
 		const listener: EventListenerOrEventListenerObject = e => {
-			const ev = e as CustomEvent;
-			if (
-				ev.type === UPDATE_BREAK_AREA &&
-				ev.detail.id === msgId &&
-				ev.detail.providerId === providerId.current
-			) {
+			const ev = e as CustomEvent<BreakPointChangeEventData<T, U, K>>;
+			if (ev.type === UPDATE_BREAK_AREA && ev.detail.id === msgId && ev.detail.providerId === providerId) {
 				const newVal = triggerFunc(ev.detail.current, breakPointsRef.current[id].breakAreas); // === breakArea;
 				if (isInBoundaryRef.current !== newVal) {
 					setTimeout(() => setInBoundary(newVal)); // use event queue to remove race condition.
 				}
 			}
 		};
-		const newVal = triggerFunc(dataRef.current[id as string], breakPointsRef.current[id].breakAreas); // === breakArea;
+		const newVal = triggerFunc(dataRef.current[id as keyof T], breakPointsRef.current[id].breakAreas); // === breakArea;
 		if (isInBoundaryRef.current !== newVal) {
 			setTimeout(() => setInBoundary(newVal)); // use event queue to remove race condition.
 		}

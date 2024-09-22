@@ -1,15 +1,14 @@
-import { BreakAreaId, BreakAreaProvider, BreakPointContainer, useBreakAreaInfo } from 'container-breakpoints-react';
-import { containerBreakpoints, containerBreakpoints2 } from './consts';
+import { BreakAreaProvider, BreakPointContainer, useBreakAreaInfo } from 'container-breakpoints-react';
 import styles from './Test2.module.css';
-
-import { PropsWithChildren, useRef } from 'react';
+import { PropsWithChildren } from 'react';
 
 const breakPoints = {
 	main: {
-		breakSizes: [300, 600],
 		breakAreas: ['sm', 'md', 'lg'],
+		breakSizes: [600, 900],
 	},
-};
+} as const;
+
 function Test2() {
 	return (
 		<BreakAreaProvider breakPoints={breakPoints}>
@@ -20,17 +19,37 @@ function Test2() {
 }
 
 const Container = () => {
-	const { current } = useBreakAreaInfo('main');
-
 	return (
 		<BreakPointContainer id='main' className={styles.container}>
-			<div className={styles.wrapper}>test</div>
+			<div className={styles.wrapper}>
+				<Carousel />
+			</div>
 		</BreakPointContainer>
 	);
 };
 
+const Carousel = () => {
+	const { isBreakUp } = useBreakAreaInfo<typeof breakPoints>('main');
+	return (
+		<div className={styles.carousel}>
+			<CarouselItem title={'Gone with wind'}>1</CarouselItem>
+			{isBreakUp('lg') && <CarouselItem title='Dance with Wolves'>2</CarouselItem>}
+			<CarouselItem title='Day after Tomorrow'>3</CarouselItem>
+		</div>
+	);
+};
+
+const CarouselItem = ({ children, title }: PropsWithChildren<{ title: string }>) => {
+	return (
+		<div className={styles.carouselItem}>
+			<h2>{title}</h2>
+			<p>{children}</p>
+		</div>
+	);
+};
+
 const ControlBox = () => {
-	const { current } = useBreakAreaInfo('main');
+	const { current } = useBreakAreaInfo<typeof breakPoints>('main');
 	return (
 		<div className={styles.controlBox}>
 			<div>current: {current}</div>
