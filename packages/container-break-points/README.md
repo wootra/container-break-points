@@ -119,7 +119,9 @@ export {
 
 Now, you can use it without setting any types. And it will MAGICALLY find all the breakPoint values, and map all the hook, Provider, Container components with typescript types.
 [Demo Code](https://github.com/wootra/container-break-points/blob/main/apps/demo/src/Test2.tsx)
-![auto-completion](https://github.com/wootra/container-break-points/blob/main/apps/demo)/break-pt-conteinr-auto-complete.png?raw=true)
+
+![auto-completion](https://github.com/wootra/container-break-points/blob/main/packages/container-break-points/break-pt-conteinr-auto-complete.png?raw=true)
+
 ```typescript
 import { breakPt } from './config';
 const {
@@ -168,7 +170,10 @@ const CarouselItem = ({ children, title }: PropsWithChildren<{ title: string }>)
 	);
 };
 ```
+
 ![demo]([my_video.mov](https://github.com/wootra/container-break-points/blob/main/packages/container-break-points)/breakpoint-demo.mp4?raw=true)
+
+
 <video width="320" height="240" controls>
   <source src="https://github.com/wootra/container-break-points/blob/main/packages/container-break-points)/breakpoint-demo.mp4?raw=true" type="video/mp4">
 </video>
