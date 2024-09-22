@@ -1,5 +1,6 @@
-import { BreakAreaProvider, BreakPointContainer, useBreakAreaInfo } from 'container-breakpoints-react';
-import { BreakPointsOptions, containerBreakpoints } from './consts';
+import breakPt from './consts';
+const { useBreakAreaInfo, BreakAreaProvider, BreakPointContainer } = breakPt;
+
 import styles from './ProviderWrapper.module.css';
 
 function WhenXsEnabled() {
@@ -23,13 +24,13 @@ function WhenXlEnabled() {
 }
 
 function MatchingSize() {
-	const { current, data: breakPtInfo, isBreakAt } = useBreakAreaInfo<BreakPointsOptions>('container1');
+	const { current, data: breakPtInfo, isBreakAt } = useBreakAreaInfo('container1');
 
 	return (
 		<div className={styles.situationHolder}>
 			<h1 className={styles.situationTitle}>Matching Size</h1>
 			<div>current area: {current}</div>
-			<div className={styles.infoBox}>break points: {breakPtInfo.breakSizes.join(',')}</div>
+			<div className={styles.infoBox}>break points: {breakPtInfo?.breakSizes.join(',')}</div>
 			<div className={styles.cardGroup}>
 				{isBreakAt('xs') && <WhenXsEnabled />}
 				{isBreakAt('sm') && <WhenSmEnabled />}
@@ -42,13 +43,13 @@ function MatchingSize() {
 }
 
 function RangeAreas() {
-	const { current, data: breakPtInfo, isBreakBetween } = useBreakAreaInfo<BreakPointsOptions>('container1');
+	const { current, data: breakPtInfo, isBreakBetween } = useBreakAreaInfo('container1');
 
 	return (
 		<div className={styles.situationHolder}>
 			<h1 className={styles.situationTitle}>Range Areas</h1>
 			<div>current area: {current}</div>
-			<div className={styles.infoBox}>break points: {breakPtInfo.breakSizes.join(',')}</div>
+			<div className={styles.infoBox}>break points: {breakPtInfo?.breakSizes.join(',')}</div>
 			<div className={styles.cardGroup}>
 				{isBreakBetween('xs', 'md') && (
 					<>
@@ -84,13 +85,13 @@ function RangeAreas() {
 }
 
 function SmallerOrBigger() {
-	const { current, data: breakPtInfo, isBreakDown, isBreakUp } = useBreakAreaInfo<BreakPointsOptions>('container1');
+	const { current, data: breakPtInfo, isBreakDown, isBreakUp } = useBreakAreaInfo('container1');
 
 	return (
 		<div className={styles.situationHolder}>
 			<h1 className={styles.situationTitle}>Range Areas</h1>
 			<div>current area: {current}</div>
-			<div className={styles.infoBox}>break points: {breakPtInfo.breakSizes.join(',')}</div>
+			<div className={styles.infoBox}>break points: {breakPtInfo?.breakSizes.join(',')}</div>
 			<div className={styles.cardGroup}>
 				{isBreakDown('md') && (
 					<>
@@ -116,13 +117,13 @@ function SmallerOrBigger() {
 }
 
 function InfoBox() {
-	const { current, data: breakPtInfo } = useBreakAreaInfo<BreakPointsOptions>('container1');
+	const { current, data: breakPtInfo } = useBreakAreaInfo('container1');
 
 	return (
 		<div className={styles.situationHolder}>
 			<h1 className={styles.situationTitle}>Range Areas</h1>
 			<div>current area: {current}</div>
-			<div className={styles.infoBox}>break points: {breakPtInfo.breakSizes.join(',')}</div>
+			<div className={styles.infoBox}>break points: {breakPtInfo?.breakSizes.join(',')}</div>
 		</div>
 	);
 }
@@ -130,7 +131,7 @@ function InfoBox() {
 function ProviderWrapper() {
 	return (
 		<>
-			<BreakAreaProvider breakPoints={containerBreakpoints}>
+			<BreakAreaProvider>
 				<div className={styles.providerWrapper}>
 					<div className={styles.leftArea}>
 						<InfoBox />

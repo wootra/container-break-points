@@ -13,20 +13,26 @@ export const useBreakAreaInfo = <
 	id: K
 ) => {
 	const { breakPointsRef, providerId, dataRef } = useContext(getBreakAreaContext<T, U, K>());
-	const [data, setData] = useState({ breakAreas: [], breakSizes: [] } as unknown as BreakAreaInfo<T, U, K>);
+	const [data, setData] = useState({ breakAreas: [], breakSizes: [] } as unknown as
+		| BreakAreaInfo<T, U, K>
+		| undefined);
 	const [current, setCurrent] = useState<string>('');
 	const msgId = useMemo(() => getMsgOwnerId(id as string), [id]);
 	const savedCurrRef = useRef('');
 	savedCurrRef.current = current;
-	const savedDataRef = useRef<BreakAreaInfo<T, U, K>>(data);
+	const savedDataRef = useRef<BreakAreaInfo<T, U, K> | undefined>(data);
 
 	useEffect(() => {
 		if (breakPointsRef.current) {
 			savedDataRef.current = breakPointsRef.current[id];
-			setData(breakPointsRef.current[id]);
+			setTimeout(() => {
+				setData(breakPointsRef.current[id]);
+			});
 		}
 		if (dataRef.current?.[id as string]) {
-			setCurrent(dataRef.current[id as string]);
+			setTimeout(() => {
+				setCurrent(dataRef.current[id as string]);
+			});
 		}
 		const listener: EventListenerOrEventListenerObject = e => {
 			const ev = e as CustomEvent;

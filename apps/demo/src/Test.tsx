@@ -1,14 +1,15 @@
-import { BreakAreaId, BreakAreaProvider, BreakPointContainer, useBreakAreaInfo } from 'container-breakpoints-react';
-import { containerBreakpoints, containerBreakpoints2 } from './consts';
+import { breakPt1, breakPt2 } from './TestBreakPointConfig';
+import type { GroupTypes1, GroupTypes2 } from './TestBreakPointConfig';
+
 import './Test.css';
 import { PropsWithChildren, useRef } from 'react';
 
-type BreakGroup = BreakAreaId<typeof containerBreakpoints>;
-
-function CardInfo({ id }: { id: BreakGroup }) {
+const CardContent = (
+	props: ReturnType<typeof breakPt1.useBreakAreaInfo> | ReturnType<typeof breakPt2.useBreakAreaInfo>
+) => {
 	const count = useRef(0);
+	const { current, data: breakPtInfo, isBreakAt, isBreakBetween, isBreakDown, isBreakUp } = props;
 	const ref = useRef<HTMLDivElement>(null);
-	const { current, data: breakPtInfo, isBreakAt, isBreakBetween, isBreakDown, isBreakUp } = useBreakAreaInfo(id);
 	const isMd = isBreakAt('md-card');
 	const isBetween = isBreakBetween('sm-card', 'lg-card');
 	const smallerThanMd = isBreakDown('md-card');
@@ -18,7 +19,7 @@ function CardInfo({ id }: { id: BreakGroup }) {
 	return (
 		isMd !== null && (
 			<div ref={ref}>
-				<div>breaks: {JSON.stringify(breakPtInfo.breakSizes)}</div>
+				<div>breaks: {JSON.stringify(breakPtInfo?.breakSizes)}</div>
 				<div>render count:{count.current}</div>
 				<div>currWidth: {currWidth}</div>
 				<div>currArea: {current}</div>
@@ -30,47 +31,68 @@ function CardInfo({ id }: { id: BreakGroup }) {
 			</div>
 		)
 	);
+};
+
+function CardInfo1({ id }: { id: GroupTypes1 }) {
+	const props = breakPt1.useBreakAreaInfo(id);
+	return <CardContent {...props} />;
 }
 
-function Card({ double, id, children }: PropsWithChildren<{ double?: boolean; id: BreakGroup }>) {
+function CardInfo2({ id }: { id: GroupTypes2 }) {
+	const props = breakPt2.useBreakAreaInfo(id);
+	return <CardContent {...props} />;
+}
+
+function Card1({ double, id, children }: PropsWithChildren<{ double?: boolean; id: GroupTypes1 }>) {
 	return (
-		<BreakPointContainer id={id} className={`card ${double ? 'double' : ''}`}>
+		<breakPt1.BreakPointContainer id={id} className={`card ${double ? 'double' : ''}`}>
 			<h1>{children}</h1>
 
-			<CardInfo id={id} />
+			<CardInfo1 id={id} />
 			<div className='card-content'>Ad sit aliqua pariatur duis minim deserunt id dolore.</div>
-		</BreakPointContainer>
+		</breakPt1.BreakPointContainer>
+	);
+}
+
+function Card2({ double, id, children }: PropsWithChildren<{ double?: boolean; id: GroupTypes2 }>) {
+	return (
+		<breakPt2.BreakPointContainer id={id} className={`card ${double ? 'double' : ''}`}>
+			<h1>{children}</h1>
+
+			<CardInfo2 id={id} />
+			<div className='card-content'>Ad sit aliqua pariatur duis minim deserunt id dolore.</div>
+		</breakPt2.BreakPointContainer>
 	);
 }
 
 function Test() {
 	return (
 		<>
-			<BreakAreaProvider breakPoints={containerBreakpoints}>
+			<breakPt1.BreakAreaProvider>
 				<div className='card-holder'>
-					<Card id='card1'>card1</Card>
-					<Card double id='card2'>
+					<Card1 id='card1'>card1</Card1>
+					<Card1 double id='card2'>
 						card1
-					</Card>
-					<Card id='card3'>card1</Card>
-					<Card double id='card4'>
+					</Card1>
+					<Card1 id='card3'>card1</Card1>
+					<Card1 double id='card4'>
 						card1
-					</Card>
+					</Card1>
 				</div>
-			</BreakAreaProvider>
+			</breakPt1.BreakAreaProvider>
 
-			<BreakAreaProvider breakPoints={containerBreakpoints2}>
+			<breakPt2.BreakAreaProvider>
 				<div className='card-holder2'>
-					<Card id='card1'>card2</Card>
-					<Card double id='card2'>
+					<Card2 id='card1'>card2</Card2>
+					<Card2 double id='card2'>
 						card2
-					</Card>
-					<Card id='card3'>card2</Card>
-					<Card double id='card4'>
+					</Card2>
+					<Card2 id='card3'>card2</Card2>
+					<Card2 double id='card4'>
 						card2
-					</Card>
+					</Card2>
 				</div>
-			</BreakAreaProvider>
+			</breakPt2.BreakAreaProvider>
 		</>
 	);
 }

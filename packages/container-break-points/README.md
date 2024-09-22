@@ -81,20 +81,20 @@ useBreakAreaInfo will allow you to control optional rendering based on the conta
 As you see the argument, the hook need the id of the container. You can keep a constant file and reuse it to manage all the breakpoints at one spot.
 
 ```typescript
-export const containerBreakpoints = Object.freeze({
+export const containerBreakpoints = {
     main: {
         breakSizes: [320, 768, 1024],
-        breakAreas: ['xs', 'sm', 'md', 'lg'] as const,
+        breakAreas: ['xs', 'sm', 'md', 'lg'],
     },
     card: {
         breakSizes: [150],
-        breakAreas: ['small-card', 'big-card'] as const,
+        breakAreas: ['small-card', 'big-card'],
     },
     banner: {
         breakSizes: [320, 768],
-        breakAreas: ['small-banner', 'medium-banner', 'big-banner'] as const,
+        breakAreas: ['small-banner', 'medium-banner', 'big-banner'],
     }
-});
+} as const; // simply add "as const" after your component!
 export type BreakPointOptions = typeof containerBreakpoints;
 ```
 

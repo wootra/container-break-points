@@ -1,4 +1,12 @@
-import { MutableRefObject, PropsWithChildren, createContext, useCallback, useEffect, useMemo, useRef } from 'react';
+import React, {
+	MutableRefObject,
+	PropsWithChildren,
+	createContext,
+	useCallback,
+	useEffect,
+	useMemo,
+	useRef,
+} from 'react';
 import type {
 	BreakAreaInfo,
 	BreakAreaStates,
@@ -140,4 +148,10 @@ const BreakAreaProvider = <
 	return <ConvertedContext.Provider value={value}>{children}</ConvertedContext.Provider>;
 };
 
-export { BreakAreaProvider };
+const getBreakAreaProvider = <T extends BreakPointSatisfyObj>(breakPoints: T) => {
+	return React.memo(({ children }: PropsWithChildren) => (
+		<BreakAreaProvider breakPoints={breakPoints}>{children}</BreakAreaProvider>
+	));
+};
+
+export { getBreakAreaProvider };
