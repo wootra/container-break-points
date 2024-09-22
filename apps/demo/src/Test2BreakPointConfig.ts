@@ -11,9 +11,9 @@ const {
 } = createContainerBreakPoint({
 	carrousel: {
 		breakAreas: ['sm', 'md', 'lg'],
-		breakSizes: [600, 900],
+		breakSizes: [450, 700],
 	},
-});
+} as const);
 
 export {
 	BreakAreaProvider,
