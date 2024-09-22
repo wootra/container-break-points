@@ -27,7 +27,7 @@ If we are controlling the size of the component based on the window's size, your
 ## Architecture
 
 ![Architecture](https://github.com/wootra/container-break-points/blob/main/packages/container-break-points/architecture.png?raw=true)
-
+![alt text](image.png)
 container-breakpoints library thought about multiple break points that can have a lot more freedom.
 
 So, it has "container" boundary that has "id" for the specific container. We will share each container's status across all your application.
@@ -98,7 +98,7 @@ import { createContainerBreakPoint } from 'container-breakpoints-react';
 const breakPt = createContainerBreakPoint({
 	carrousel: {
 		breakAreas: ['sm', 'md', 'lg'],
-		breakSizes: [600, 900],
+		breakSizes: [450, 750],
 	},
 } as const); // <===== IMPORTANT!! put `as const` at the end!!
 
@@ -158,7 +158,7 @@ const CarouselItem = ({ children, title }: PropsWithChildren<{ title: string }>)
 	);
 };
 ```
-
+![demo]([my_video.mov](https://github.com/wootra/container-break-points/blob/main/packages/container-break-points)/breakpoint-demo.mp4?raw=true)
 <video width="320" height="240" controls>
   <source src="https://github.com/wootra/container-break-points/blob/main/packages/container-break-points)/breakpoint-demo.mp4?raw=true" type="video/mp4">
 </video>
