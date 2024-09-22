@@ -1,15 +1,25 @@
 # container-breakpoints-react
 
-In the concept of responsive design, we use @media queries. 
-when the screen size is changed, the UI layout or contents can be changed.
-But now we have @container queries which we can control each components or widgets more flexible.
+In the concept of responsive design, we usually use @media queries. _BUT!_ 
+when the container's size is NOT changed as the screen size is changed, the responive design easily becomes _PAIN_!! Yeah. Now we have container queries, but Why don't we have javascript controlled container query? 
 
-We can use CSS to manage the breakpoints in the container level.
-But If you want to manage its information in the javascript level, 
-it becomes a little challenge to organize CSS/Components as a managable size.
+`container-breakpoints-react` acts like container query, but what is better than container query is, 
 
-We have ResizeObserver to detect the size of the container. 
-And This library started from there.
+- actually control rendering based on the size of `container` - HTML structure become simpler!
+- No CSS override is needed. Once you have already responsive flex/grid layout, just use this on top of that!
+- it is easy to use! fully `typescript` support! (your breakpoint name will be auto-completed)
+
+## Event driven update
+
+- while `container-breakpoints-react` still use context, it does NOT trigger whole children updates which made us to use state manager like jotai or redux. 
+- the context just share ref objects, and only custom event will trigger each hooks to read the saved data. This design allows multiple update from ResizeObserver without triggering rendering. - it is FAST!!
+
+## Typescript auto-completion is the core of container-breakpoints-react
+
+I know typescript makes everybody lazy. And I am one of you guys. I don't want to type too much, I don't want to find documentation, just give me auto-completion options!!
+
+Yes.. I know. So I made it as easy as possible. Try it out. And let me know how it feels like!
+
 
 ## Concept 
 
@@ -27,7 +37,7 @@ If we are controlling the size of the component based on the window's size, your
 ## Architecture
 
 ![Architecture](https://github.com/wootra/container-break-points/blob/main/packages/container-break-points/architecture.png?raw=true)
-![alt text](image.png)
+
 container-breakpoints library thought about multiple break points that can have a lot more freedom.
 
 So, it has "container" boundary that has "id" for the specific container. We will share each container's status across all your application.
