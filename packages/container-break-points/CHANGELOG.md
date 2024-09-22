@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## 2.0.1-0
+- update README
+
 ## 2.0.0
 - fix: type autocomplete was not working as expected.
 - fix: useBreakAreaInfo was not initialized properly.
