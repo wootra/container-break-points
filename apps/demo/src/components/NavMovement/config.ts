@@ -19,24 +19,6 @@ const {
 	},
 });
 
-// const obj = {
-// 	carrousel: {
-// 		breakAreas: ['sm', 'md', 'lg'],
-// 		breakSizes: [450, 700],
-// 	},
-// 	nav: {
-// 		breakAreas: ['sm', 'lg'],
-// 		breakSizes: [1024],
-// 	},
-// } as const;
-
-// function ffff<T extends keyof typeof obj>(id: T) {
-// 	return obj[id] as (typeof obj)[T];
-// }
-
-// const a = ffff('nav');
-// export const tt:BreakAreaInfo<typeof obj, "nav"> = "";
-
 export {
 	BreakAreaProvider,
 	BreakPointContainer,

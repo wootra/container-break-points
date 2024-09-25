@@ -61,7 +61,7 @@ In this way, we will have a single name for the each boundary.
 
 ## Use useBreakAreaInfo hook for the basic-easy usage.
 
-To manage multiple areas, you will call a simple hook and it will provide you helper functions. [Demo Code](https://github.com/wootra/container-break-points/blob/main/packages/container-break-points/https://github.com/wootra/container-break-points/blob/main/demo/src/routes/SimpleExample/ProviderWrapper.tsx)
+To manage multiple areas, you will call a simple hook and it will provide you helper functions. [Demo Code](https://github.com/wootra/container-break-points/blob/main/demo/src/routes/SimpleExample/ProviderWrapper.tsx)
 
 ```
 import { createContainerBreakPoint } from 'container-breakpoints-react';
@@ -100,60 +100,72 @@ useBreakAreaInfo will allow you to control optional rendering based on the conta
 | useBreakAreasUp | id:string, from:string | is the breakArea bigger or equal to from area? |
 | useBreakAreasDown | id:string, from:string | is the breakArea smaller or equal to from area? |
 
-As you see the argument, the hook need the id of the container. You can keep a constant file and reuse it to manage all the breakpoints at one spot. [Demo Code](https://github.com/wootra/container-break-points/blob/main/apps/demo/src/Test2BreakPointConfig.ts)
+As you see the argument, the hook need the id of the container. You can keep a constant file and reuse it to manage all the breakpoints at one spot. [Demo Code][Demo Code (config)](https://github.com/wootra/container-break-points/blob/main/apps/demo/src/components/Test/config.ts)
 NOTE: important!! you need to put `as const` at the end of the object to get the right type inferrence.
 
 ```typescript
 // config.ts
 import { createContainerBreakPoint } from 'container-breakpoints-react';
 
-const breakPt = createContainerBreakPoint({
-	carrousel: {
-		breakAreas: ['sm', 'md', 'lg'],
-		breakSizes: [450, 750],
-	},
-} as const); // <===== IMPORTANT!! put `as const` at the end!!
-
-export {
-	breakPt
-};
-```
-
-Now, you can use it without setting any types. And it will MAGICALLY find all the breakPoint values, and map all the hook, Provider, Container components with typescript types.
-[Demo Code](https://github.com/wootra/container-break-points/blob/main/apps/demo/src/Test2.tsx)
-
-![auto-completion](https://github.com/wootra/container-break-points/blob/main/packages/container-break-points/break-pt-conteinr-auto-complete.png?raw=true)
-
-```typescript
-import { breakPt } from './config';
 const {
-    BreakAreaProvider,
+	BreakAreaProvider,
 	BreakPointContainer,
 	useBreakAreaAt,
 	useBreakAreaBetween,
 	useBreakAreaInfo,
 	useBreakAreasDown,
 	useBreakAreasUp,
-} = breakPt;
+} = createContainerBreakPoint({
+	carrousel: {
+		breakAreas: ['sm', 'md', 'lg'],
+		breakSizes: [450, 700],
+	},
+} as const);
 
+export {
+	BreakAreaProvider,
+	BreakPointContainer,
+	useBreakAreaAt,
+	useBreakAreaBetween,
+	useBreakAreaInfo,
+	useBreakAreasDown,
+	useBreakAreasUp,
+};
+```
+
+Now, you can use it without setting any types. And it will MAGICALLY find all the breakPoint values, and map all the hook, Provider, Container components with typescript types.
+[Demo Code](https://github.com/wootra/container-break-points/blob/main/apps/demo/src/components/Test2/index.tsx)
+
+![auto-completion](https://github.com/wootra/container-break-points/blob/main/packages/container-break-points/break-pt-conteinr-auto-complete.png?raw=true)
+
+```typescript
+import { BreakAreaProvider, BreakPointContainer, useBreakAreaInfo } from './config';
+import styles from './styles.module.css';
+import { PropsWithChildren } from 'react';
 
 function Test2() {
-    // Provider will not need any variable, since it is automatically assigned.
-    // id will be auto-completed.
 	return (
 		<BreakAreaProvider>
-			<BreakPointContainer id='carrousel' className={styles.container}>
-                <div className={styles.wrapper}>
-                    <Carousel />
-                </div>
-		    </BreakPointContainer>
+			<div className={styles.container}>
+				<BreakPointContainer id='carrousel' className={styles.wrapper}>
+					<Carousel />
+				</BreakPointContainer>
+
+				<div className={styles.moreContent}>
+					<p>
+						Excepteur eiusmod amet pariatur consequat non aliquip quis ullamco sint adipisicing consectetur
+						
+					</p>
+					More content
+					<ControlBox />
+				</div>
+			</div>
 		</BreakAreaProvider>
 	);
 }
 
 const Carousel = () => {
-	const { isBreakUp } = useBreakAreaInfo('carrousel'); // 'carrousel will be auto-completed
-    // below isBreakUp's argument will be auto-completed.
+	const { isBreakUp } = useBreakAreaInfo('carrousel');
 	return (
 		<div className={styles.carousel}>
 			<CarouselItem title={'Gone with wind'}>1</CarouselItem>
@@ -171,6 +183,17 @@ const CarouselItem = ({ children, title }: PropsWithChildren<{ title: string }>)
 		</div>
 	);
 };
+
+const ControlBox = () => {
+	const { current } = useBreakAreaInfo('carrousel');
+	return (
+		<div className={styles.controlBox}>
+			<div>current: {current}</div>
+		</div>
+	);
+};
+
+export default Test2;
 ```
 
 ![Demo video download](https://github.com/wootra/container-break-points/raw/refs/heads/main/packages/container-break-points/breakpoint-demo.mp4)
