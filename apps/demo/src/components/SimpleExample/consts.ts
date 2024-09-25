@@ -5,6 +5,6 @@ const breakPt = createContainerBreakPoint({
 		breakSizes: [300, 400, 500, 600],
 		breakAreas: ['xs', 'sm', 'md', 'lg', 'xl'],
 	},
-} as const);
+});
 
 export default breakPt;

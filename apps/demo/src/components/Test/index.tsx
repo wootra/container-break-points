@@ -1,5 +1,5 @@
-import { breakPt1, breakPt2 } from './TestBreakPointConfig';
-import type { GroupTypes1, GroupTypes2 } from './TestBreakPointConfig';
+import { breakPt1, breakPt2 } from './config';
+import type { GroupTypes1, GroupTypes2 } from './config';
 
 import './Test.css';
 import { PropsWithChildren, useRef } from 'react';

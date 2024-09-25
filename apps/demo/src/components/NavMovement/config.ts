@@ -17,7 +17,7 @@ const {
 		breakAreas: ['sm', 'lg'],
 		breakSizes: [1024],
 	},
-} as const);
+});
 
 // const obj = {
 // 	carrousel: {

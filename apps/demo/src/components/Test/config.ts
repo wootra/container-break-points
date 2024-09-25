@@ -36,8 +36,7 @@ const breakPt2 = createContainerBreakPoint({
 		breakAreas: ['sm-card', 'md-card', 'lg-card'],
 	},
 } as const);
-type GroupTypes1 = keyof typeof breakPt1.breakConfig;
-type GroupTypes2 = keyof typeof breakPt2.breakConfig;
 
 export { breakPt1, breakPt2 };
-export type { GroupTypes1, GroupTypes2 };
+export type GroupTypes1 = keyof (typeof breakPt1)['breakConfig'];
+export type GroupTypes2 = keyof (typeof breakPt2)['breakConfig'];
