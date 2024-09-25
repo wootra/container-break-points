@@ -1,20 +1,40 @@
 import { getBreakAreaProvider } from './BreakAreaProvider';
-import { BreakPointContainer as BreakPointContainerOrg } from './BreakPointContainer';
+import { getBreakPointContainer } from './BreakPointContainer';
 import { useBreakAreaInfo as useBreakAreaInfoOrg } from './useBreakAreaInfo';
 import { useBreakAreaAt as useBreakAreaAtOrg } from './useBreakAreaAt';
 import { useBreakAreaBetween as useBreakAreaBetweenOrg } from './useBreakAreaBetween';
 import { useBreakAreasDown as useBreakAreasDownOrg } from './useBreakAreasDown';
 import { useBreakAreasUp as useBreakAreasUpOrg } from './useBreakAreasUp';
-import { BreakPointSatisfyObj, BreakPtObj } from './types';
+import { BreakArea, BreakPointSatisfyObj, BreakPtObj } from './types';
 
-function createContainerBreakPoint<T extends BreakPointSatisfyObj = BreakPointSatisfyObj>(breakPoints: T) {
-	const BreakPointContainer = BreakPointContainerOrg<T>;
-	const BreakAreaProvider = getBreakAreaProvider(breakPoints);
-	const useBreakAreaInfo = useBreakAreaInfoOrg<T>;
-	const useBreakAreaAt = useBreakAreaAtOrg<T>;
-	const useBreakAreaBetween = useBreakAreaBetweenOrg<T>;
-	const useBreakAreasDown = useBreakAreasDownOrg<T>;
-	const useBreakAreasUp = useBreakAreasUpOrg<T>;
+function createContainerBreakPoint<const T extends BreakPointSatisfyObj>(breakPoints: T) {
+	const BreakPointContainer = getBreakPointContainer<T, keyof T>();
+	const BreakAreaProvider = getBreakAreaProvider<T>(breakPoints);
+	const useBreakAreaInfo = <K extends keyof T>(id: K) => {
+		return useBreakAreaInfoOrg<T, keyof T>(id);
+	};
+	const useBreakAreaAt = <K extends keyof T, AREA extends BreakArea<T, K> = BreakArea<T, K>>(
+		id: K,
+		breakArea: AREA
+	) => {
+		return useBreakAreaAtOrg<T, K>(id, breakArea);
+	};
+	const useBreakAreaBetween = <K extends keyof T, AREA extends BreakArea<T, K> = BreakArea<T, K>>(
+		id: K,
+		from: AREA,
+		to: AREA
+	) => {
+		return useBreakAreaBetweenOrg<T, K>(id, from, to);
+	};
+	const useBreakAreasDown = <K extends keyof T, AREA extends BreakArea<T, K> = BreakArea<T, K>>(
+		id: K,
+		from: AREA
+	) => {
+		return useBreakAreasDownOrg<T, K>(id, from);
+	};
+	const useBreakAreasUp = <K extends keyof T, AREA extends BreakArea<T, K> = BreakArea<T, K>>(id: K, from: AREA) => {
+		return useBreakAreasUpOrg<T, K>(id, from);
+	};
 
 	return {
 		BreakPointContainer,
@@ -24,7 +44,7 @@ function createContainerBreakPoint<T extends BreakPointSatisfyObj = BreakPointSa
 		useBreakAreaBetween,
 		useBreakAreasDown,
 		useBreakAreasUp,
-		breakConfig: breakPoints as BreakPtObj<T>,
+		breakConfig: breakPoints as BreakPtObj<T, keyof T>,
 	};
 }
 

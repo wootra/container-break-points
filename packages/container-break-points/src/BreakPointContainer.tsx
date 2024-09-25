@@ -1,17 +1,17 @@
 import { PropsWithChildren, useContext, useEffect, useRef } from 'react';
 import { getBreakAreaContext } from './BreakAreaProvider';
 import { BreakPointSatisfyObj, BreakPtObj } from './types';
-type Props<T extends BreakPointSatisfyObj = BreakPointSatisfyObj, U extends BreakPtObj<T> = BreakPtObj<T>> = {
+type Props<T extends BreakPointSatisfyObj, K extends keyof T> = {
 	className?: string;
-	id: keyof U;
+	id: K;
 };
-const BreakPointContainer = <T extends BreakPointSatisfyObj = BreakPointSatisfyObj>({
+const BreakPointContainer = <T extends BreakPointSatisfyObj, K extends keyof T>({
 	id,
 	className,
 	children,
-}: PropsWithChildren<Props<T>>) => {
+}: PropsWithChildren<Props<T, K>>) => {
 	const containerRef = useRef<HTMLDivElement>(null);
-	const { setBreakArea } = useContext(getBreakAreaContext<T>());
+	const { setBreakArea } = useContext(getBreakAreaContext<T, K>());
 	useEffect(() => {
 		const resizeObserver = new ResizeObserver(entries => {
 			for (const entry of entries) {
@@ -34,4 +34,8 @@ const BreakPointContainer = <T extends BreakPointSatisfyObj = BreakPointSatisfyO
 	);
 };
 
-export { BreakPointContainer };
+const getBreakPointContainer = <T extends BreakPointSatisfyObj, K extends keyof T>() => {
+	return BreakPointContainer<T, K>;
+};
+
+export { getBreakPointContainer };

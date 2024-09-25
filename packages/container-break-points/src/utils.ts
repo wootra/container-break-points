@@ -1,10 +1,5 @@
 import { BreakPointSatisfyObj, BreakPtObj } from './types';
 
-export const getMsgOwnerId = <
-	T extends BreakPointSatisfyObj = BreakPointSatisfyObj,
-	U extends BreakPtObj<T> = BreakPtObj<T>,
->(
-	id: keyof U
-) => {
+export const getMsgOwnerId = <T extends BreakPointSatisfyObj, K extends keyof T>(id: K) => {
 	return `break-area-hook-${id as string}`;
 };

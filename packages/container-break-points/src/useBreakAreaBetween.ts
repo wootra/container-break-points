@@ -4,16 +4,16 @@ import { useBreakAreaCommon } from './useBreakAreaCommon';
 import { BreakArea, BreakPointSatisfyObj, BreakPtObj, TriggerFunc } from './types';
 
 export const useBreakAreaBetween = <
-	T extends BreakPointSatisfyObj = BreakPointSatisfyObj,
-	U extends BreakPtObj<T> = BreakPtObj<T>,
-	K extends keyof U = keyof U,
-	AREA extends BreakArea<T, U, K> = BreakArea<T, U, K>,
+	T extends BreakPointSatisfyObj,
+	K extends keyof T,
+	U extends BreakPtObj<T, K> = BreakPtObj<T, K>,
+	AREA extends BreakArea<T, K> = BreakArea<T, K>,
 >(
 	id: K,
 	from: AREA,
 	to: AREA
 ) => {
-	const triggerFunc: TriggerFunc<T, U, K> = useCallback(
+	const triggerFunc: TriggerFunc<T, K> = useCallback(
 		(current, breakAreas) => {
 			let startIdx = breakAreas.indexOf(from as string);
 			let endIdx = breakAreas.indexOf(to as string);
@@ -38,5 +38,5 @@ export const useBreakAreaBetween = <
 		},
 		[from, to]
 	);
-	return useBreakAreaCommon<T, U, K>(id, triggerFunc);
+	return useBreakAreaCommon<T, K>(id, triggerFunc);
 };

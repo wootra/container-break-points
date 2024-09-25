@@ -1,5 +1,5 @@
-import { BreakAreaProvider, BreakPointContainer, useBreakAreaInfo } from './Test2BreakPointConfig';
-import styles from './Test2.module.css';
+import { BreakAreaProvider, BreakPointContainer, useBreakAreaInfo } from './config';
+import styles from './styles.module.css';
 import { PropsWithChildren } from 'react';
 
 function Test2() {

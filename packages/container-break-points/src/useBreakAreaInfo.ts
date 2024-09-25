@@ -2,25 +2,22 @@ import { useCallback, useContext, useEffect, useMemo, useRef, useState } from 'r
 import { UPDATE_BREAK_AREA } from './consts';
 import { getBreakAreaContext } from './BreakAreaProvider';
 import { getMsgOwnerId } from './utils';
-import { BreakAreaInfo, BreakPointSatisfyObj, BreakPtObj, BreakArea } from './types';
+import { BreakAreaInfo, BreakPointSatisfyObj, BreakArea } from './types';
 
 export const useBreakAreaInfo = <
-	T extends BreakPointSatisfyObj = BreakPointSatisfyObj,
-	U extends BreakPtObj<T> = BreakPtObj<T>,
-	K extends keyof U = keyof U,
-	AREA extends BreakArea<T, U, K> = BreakArea<T, U, K>,
+	T extends BreakPointSatisfyObj,
+	K extends keyof T,
+	AREA extends BreakArea<T, K> = BreakArea<T, K>,
 >(
 	id: K
 ) => {
-	const { breakPointsRef, providerId, dataRef } = useContext(getBreakAreaContext<T, U, K>());
-	const [data, setData] = useState({ breakAreas: [], breakSizes: [] } as unknown as
-		| BreakAreaInfo<T, U, K>
-		| undefined);
+	const { breakPointsRef, providerId, dataRef } = useContext(getBreakAreaContext<T, K>());
+	const [data, setData] = useState({ breakAreas: [], breakSizes: [] } as unknown as BreakAreaInfo<T, K> | undefined);
 	const [current, setCurrent] = useState<string>('');
 	const msgId = useMemo(() => getMsgOwnerId(id as string), [id]);
 	const savedCurrRef = useRef('');
 	savedCurrRef.current = current;
-	const savedDataRef = useRef<BreakAreaInfo<T, U, K> | undefined>(data);
+	const savedDataRef = useRef<BreakAreaInfo<T, K> | undefined>(data);
 
 	useEffect(() => {
 		if (breakPointsRef.current) {
@@ -29,9 +26,9 @@ export const useBreakAreaInfo = <
 				setData(breakPointsRef.current[id]);
 			});
 		}
-		if (dataRef.current?.[id as string]) {
+		if (dataRef.current?.[id]) {
 			setTimeout(() => {
-				setCurrent(dataRef.current[id as string]);
+				setCurrent(dataRef.current[id]);
 			});
 		}
 		const listener: EventListenerOrEventListenerObject = e => {

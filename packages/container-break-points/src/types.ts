@@ -9,46 +9,38 @@ export type BreakAreasType<T extends Immutable<{ breakAreas: string[]; breakSize
 	readonly breakSizes: T['breakSizes'] extends readonly number[] ? T['breakSizes'] : readonly number[];
 };
 
-export type BreakPtObj<T extends BreakPointSatisfyObj> = {
-	readonly [Key in keyof T]: BreakAreasType<
-		T[Key] extends { breakAreas: readonly string[]; breakSizes: readonly number[] }
-			? T[Key]
-			: { readonly breakAreas: readonly string[]; readonly breakSizes: readonly number[] }
-	>;
-};
+export type BreakPtObj<T extends BreakPointSatisfyObj, K extends keyof T> = Pick<T, K>;
 
-export type BreakAreas<
-	T extends BreakPointSatisfyObj,
-	U extends BreakPtObj<T>,
-	K extends keyof U,
-> = U[K]['breakAreas'] extends string[] ? U[K]['breakAreas'] : string[];
-export type BreakSizes<
-	T extends BreakPointSatisfyObj,
-	U extends BreakPtObj<T>,
-	K extends keyof U,
-> = U[K]['breakSizes'] extends number[] ? U[K]['breakSizes'] : number[];
-
-export type BreakAreaStates<T extends BreakPointSatisfyObj, U extends BreakPtObj<T>> = {
-	[key in keyof U]: U[key]['breakAreas'][number];
-};
-
-export type BreakAreaId<T extends BreakPointSatisfyObj, U extends BreakPtObj<T> = BreakPtObj<T>> = keyof U;
-export type BreakAreaInfo<T extends BreakPointSatisfyObj, U extends BreakPtObj<T>, K extends keyof U> = U[K];
-
-export type BreakArea<T extends BreakPointSatisfyObj, U extends BreakPtObj<T>, K extends keyof U> = BreakAreaInfo<
+export type BreakAreas<T extends BreakPointSatisfyObj, K extends keyof T> = BreakPtObj<
 	T,
-	U,
 	K
->['breakAreas'][number];
+>[K]['breakAreas'] extends string[]
+	? BreakPtObj<T, K>[K]['breakAreas']
+	: string[];
+export type BreakSizes<T extends BreakPointSatisfyObj, K extends keyof T> = BreakPtObj<
+	T,
+	K
+>[K]['breakSizes'] extends number[]
+	? BreakPtObj<T, K>[K]['breakSizes']
+	: number[];
 
-export type TriggerFunc<T extends BreakPointSatisfyObj, U extends BreakPtObj<T>, K extends keyof U> = (
-	current: BreakArea<T, U, K>,
-	breakAreas: BreakAreaInfo<T, U, K>['breakAreas']
+export type BreakAreaStates<T extends BreakPointSatisfyObj, K extends keyof T> = {
+	[key in keyof BreakPtObj<T, K>]: BreakPtObj<T, K>[key]['breakAreas'][number];
+};
+
+export type BreakAreaId<T extends BreakPointSatisfyObj, K extends keyof T> = keyof BreakPtObj<T, K>;
+export type BreakAreaInfo<T extends BreakPointSatisfyObj, K extends keyof T> = BreakPtObj<T, K>[K];
+
+export type BreakArea<T extends BreakPointSatisfyObj, K extends keyof T> = BreakAreaInfo<T, K>['breakAreas'][number];
+
+export type TriggerFunc<T extends BreakPointSatisfyObj, K extends keyof T> = (
+	current: BreakArea<T, K>,
+	breakAreas: BreakAreaInfo<T, K>['breakAreas']
 ) => boolean;
 
-export type BreakPointChangeEventData<T extends BreakPointSatisfyObj, U extends BreakPtObj<T>, K extends keyof U> = {
+export type BreakPointChangeEventData<T extends BreakPointSatisfyObj, K extends keyof T> = {
 	// type: typeof UPDATE_BREAK_AREA;
 	id: K;
 	providerId: string;
-	current: BreakArea<T, U, K>;
+	current: BreakArea<T, K>;
 };

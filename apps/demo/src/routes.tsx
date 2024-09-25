@@ -1,6 +1,7 @@
-import SimpleExample from './routes/SimpleExample/index';
-import Test from './Test';
-import Test2 from './Test2';
+import NavMovement from './components/NavMovement';
+import SimpleExample from './components/SimpleExample/index';
+import Test from './components/Test';
+import Test2 from './components/Test2';
 
 export const routes = [
 	{
@@ -20,5 +21,11 @@ export const routes = [
 		label: 'Test2',
 		ErrorBoundary: () => <div>Error3</div>,
 		element: <Test2 />,
+	},
+	{
+		path: '/nav-movement',
+		label: 'Nav Movement',
+		ErrorBoundary: () => <div>Error3</div>,
+		element: <NavMovement />,
 	},
 ];
