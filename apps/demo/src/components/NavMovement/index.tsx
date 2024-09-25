@@ -47,7 +47,7 @@ const ContentArea = () => {
 	return (
 		<div className={`${styles.contentArea}`}>
 			<LeftNav />
-			<BreakPointContainer id='carrousel' className={`${styles.wrapper} ${isBig && styles.largeLayout}`}>
+			<BreakPointContainer id='carrousel' className={`${styles.wrapper} ${isBig ? styles.largeLayout : ''}`}>
 				<Carousel />
 				<div className={styles.moreContent}>
 					<p>
