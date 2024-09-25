@@ -10,8 +10,8 @@ const {
 	useBreakAreasUp,
 } = createContainerBreakPoint({
 	carrousel: {
-		breakAreas: ['sm', 'md', 'lg'],
-		breakSizes: [450, 700],
+		breakAreas: ['sm', 'md', 'lg', 'xl'],
+		breakSizes: [450, 700, 900],
 	},
 	nav: {
 		breakAreas: ['sm', 'lg'],
