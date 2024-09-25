@@ -1,4 +1,6 @@
 # CHANGELOG
+## 2.0.2
+- fix: typescript for multiple boundary was not working. 
 
 ## 2.0.1-0
 - update README
