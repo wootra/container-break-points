@@ -25,7 +25,7 @@ export type BreakSizes<T extends BreakPointSatisfyObj, K extends keyof T> = Brea
 	: number[];
 
 export type BreakAreaStates<T extends BreakPointSatisfyObj, K extends keyof T> = {
-	[key in keyof BreakPtObj<T, K>]: BreakPtObj<T, K>[key]['breakAreas'][number];
+	[key in keyof BreakPtObj<T, K>]?: BreakPtObj<T, K>[key]['breakAreas'][number];
 };
 
 export type BreakAreaId<T extends BreakPointSatisfyObj, K extends keyof T> = keyof BreakPtObj<T, K>;

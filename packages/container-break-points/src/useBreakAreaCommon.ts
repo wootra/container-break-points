@@ -23,7 +23,11 @@ export const useBreakAreaCommon = <T extends BreakPointSatisfyObj, K extends key
 				}
 			}
 		};
-		const newVal = triggerFunc(dataRef.current[id], breakPointsRef.current[id].breakAreas); // === breakArea;
+
+		if (!dataRef.current[id] || !breakPointsRef.current[id]?.breakAreas) {
+			return;
+		}
+		const newVal = triggerFunc(dataRef.current[id], breakPointsRef.current[id]?.breakAreas); // === breakArea;
 		if (isInBoundaryRef.current !== newVal) {
 			setTimeout(() => setInBoundary(newVal)); // use event queue to remove race condition.
 		}

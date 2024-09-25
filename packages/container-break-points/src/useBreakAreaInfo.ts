@@ -26,11 +26,11 @@ export const useBreakAreaInfo = <
 				setData(breakPointsRef.current[id]);
 			});
 		}
-		if (dataRef.current?.[id]) {
-			setTimeout(() => {
+		setTimeout(() => {
+			if (dataRef.current?.[id]) {
 				setCurrent(dataRef.current[id]);
-			});
-		}
+			}
+		});
 		const listener: EventListenerOrEventListenerObject = e => {
 			const ev = e as CustomEvent;
 			if (ev.type === UPDATE_BREAK_AREA && ev.detail.id === msgId && ev.detail.providerId === providerId) {

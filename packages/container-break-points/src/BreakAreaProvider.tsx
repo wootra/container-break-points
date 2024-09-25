@@ -45,14 +45,8 @@ const getCurrBreakArea = <T extends BreakPointSatisfyObj, K extends keyof T>(
 	return breakAreas[idx];
 };
 
-const useValidateBreakPointsOptions = <
-	T extends BreakPointSatisfyObj,
-	K extends keyof T,
-	U extends BreakPtObj<T, K> = BreakPtObj<T, K>,
->(
-	breakPoints: T
-) => {
-	const breakPointsRef = useRef<U>({} as U);
+const useValidateBreakPointsOptions = <T extends BreakPointSatisfyObj, K extends keyof T>(breakPoints: T) => {
+	const breakPointsRef = useRef<BreakPtObj<T, K>>({} as BreakPtObj<T, K>);
 
 	useEffect(() => {
 		Object.keys(breakPoints).forEach(id => {
@@ -66,7 +60,7 @@ const useValidateBreakPointsOptions = <
 					breakPoints
 				);
 			} else {
-				breakPointsRef.current = breakPoints as unknown as U;
+				breakPointsRef.current = breakPoints as unknown as BreakPtObj<T, K>;
 			}
 		});
 	}, [breakPoints]);
@@ -80,7 +74,7 @@ const sendEventWhenBreakPtChanged = <T extends BreakPointSatisfyObj, K extends k
 	providerId: string,
 	dataRef: MutableRefObject<BreakAreaStates<T, K>>
 ) => {
-	if (current && (!dataRef.current[id] || current !== dataRef.current[id as K])) {
+	if (current && (!dataRef.current[id] || current !== dataRef.current[id])) {
 		dataRef.current = {
 			...dataRef.current,
 			[id]: current,
