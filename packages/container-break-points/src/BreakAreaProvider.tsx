@@ -50,7 +50,15 @@ const useValidateBreakPointsOptions = <T extends BreakPointSatisfyObj, K extends
 
 	useEffect(() => {
 		Object.keys(breakPoints).forEach(id => {
-			const { breakAreas, breakSizes } = breakPoints[id];
+			const { breakAreas, breakSizes } = breakPoints[id as keyof T] ?? {};
+			if (!breakAreas || !breakSizes) {
+				console.error(
+					'the breakPoints definition for ' + id + ' is not valid. breakAreas and breakSizes are required.',
+					'your breakPoints object is:',
+					breakPoints
+				);
+				return;
+			}
 			if (breakAreas.length - breakSizes.length !== 1) {
 				console.error(
 					'the breakPoints definition for ' +
@@ -59,6 +67,7 @@ const useValidateBreakPointsOptions = <T extends BreakPointSatisfyObj, K extends
 					'your breakPoints object is:',
 					breakPoints
 				);
+				return;
 			} else {
 				breakPointsRef.current = breakPoints as unknown as BreakPtObj<T, K>;
 			}
@@ -106,7 +115,10 @@ const BreakAreaProvider = <T extends BreakPointSatisfyObj, K extends keyof T>({
 		const obj = (breakPoints as unknown as BreakPtObj<T, K>)[id];
 		const _breakAreas = obj.breakAreas;
 		const _breakSizes = obj.breakSizes;
-		const current = getCurrBreakArea<T, K>(_breakSizes, _breakAreas, width);
+		const current = getCurrBreakArea<T, K>(_breakSizes, _breakAreas, width) as BreakPtObj<
+			T,
+			K
+		>[K]['breakAreas'][number];
 		sendEventWhenBreakPtChanged<T, K>(id, current, providerId, dataRef);
 	}, []);
 
@@ -126,7 +138,7 @@ const BreakAreaProvider = <T extends BreakPointSatisfyObj, K extends keyof T>({
 const getBreakAreaProvider = <T extends BreakPointSatisfyObj>(breakPoints: T) => {
 	return React.memo(({ children }: PropsWithChildren) => (
 		<BreakAreaProvider breakPoints={breakPoints}>{children}</BreakAreaProvider>
-	));
+	)) as ({ children }: PropsWithChildren) => JSX.Element;
 };
 
 export { getBreakAreaProvider };

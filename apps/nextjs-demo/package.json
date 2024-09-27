@@ -1,0 +1,22 @@
+{
+	"name": "nextjs-demo",
+	"private": true,
+	"scripts": {
+		"build": "next build",
+		"dev": "next dev",
+		"start": "next start"
+	},
+	"dependencies": {
+		"@repo/typescript-config": "workspace:*",
+		"container-breakpoints-react": "workspace:*",
+		"next": "latest",
+		"react": "18.2.0",
+		"react-dom": "18.2.0"
+	},
+	"engines": {
+		"node": ">=18"
+	},
+	"devDependencies": {
+		"@types/react": "^18.3.9"
+	}
+}

@@ -17,7 +17,9 @@ const BreakPointContainer = <T extends BreakPointSatisfyObj, K extends keyof T>(
 			for (const entry of entries) {
 				if (entry.contentBoxSize) {
 					const contentBoxSize = entry.contentBoxSize[0];
-					setBreakArea(id, contentBoxSize.inlineSize);
+					if (contentBoxSize) {
+						setBreakArea(id, contentBoxSize.inlineSize);
+					}
 				}
 			}
 		});

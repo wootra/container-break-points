@@ -2,10 +2,10 @@
 	"compilerOptions": {
 		"target": "esnext",
 		"module": "esnext",
-		"lib": ["ESNext", "dom"],
 		"inlineSources": true,
 		"declaration": true,
 		"declarationDir": "dist/types",
+		"incremental": true,
 		"outDir": "dist",
 		"strict": true,
 		"baseUrl": ".",
