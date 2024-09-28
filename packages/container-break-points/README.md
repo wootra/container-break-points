@@ -227,6 +227,11 @@ You can make multiple providers with different breakPoint definitions.
 
 This is useful when you have multiple different pages using client-side router.
 
+## server side support
+
+For the better User experience, you can set 
+
+
 ## NOTE
 
 This library is using CustomEvent internally. Also, it leans on memoizations such as useRef, useMemo, useCallback, and useState. 

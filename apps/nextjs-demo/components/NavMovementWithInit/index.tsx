@@ -1,19 +1,34 @@
 'use client';
-import React from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { BreakAreaProvider, BreakPointContainer, useBreakAreaInfo, useBreakAreasDown, useBreakAreasUp } from './config';
 import styles from '../../styles/NavMovement.module.css';
 import { PropsWithChildren } from 'react';
 
-function NavMovementServer() {
+function NavMovementWithInit() {
+	const [width, setWidth] = useState(0);
+	const ref = useRef<HTMLDivElement>(null);
+	useEffect(() => {
+		setTimeout(() => {
+			if (ref.current) {
+				setWidth(ref.current.clientWidth);
+			}
+		}, 5000);
+	}, []);
 	return (
-		<BreakAreaProvider initWidth={1024}>
-			<BreakPointContainer id='nav' className={styles.container}>
-				<TopNav />
-				<div className={styles.horizontal}>
-					<ContentArea />
-				</div>
-			</BreakPointContainer>
-		</BreakAreaProvider>
+		<div className={styles.outterContainer} ref={ref}>
+			{width === 0 && <div className={styles.container}> loading for 5sec... </div>}
+
+			{width > 0 && (
+				<BreakAreaProvider initWidth={width - 100}>
+					<BreakPointContainer id='nav' className={styles.container}>
+						<TopNav />
+						<div className={styles.horizontal}>
+							<ContentArea />
+						</div>
+					</BreakPointContainer>
+				</BreakAreaProvider>
+			)}
+		</div>
 	);
 }
 
@@ -121,4 +136,4 @@ const ControlBox = () => {
 	);
 };
 
-export default NavMovementServer;
+export default NavMovementWithInit;

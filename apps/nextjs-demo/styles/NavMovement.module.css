@@ -1,9 +1,14 @@
+.outterContainer {
+	width: 100%;
+}
+
 .container {
 	display: grid;
 	/* grid-template-columns: auto; */
 	grid-template-rows: repeat(auto);
 	grid-auto-flow: row;
-	width: 100vw;
+	width: calc(100% - 100px);
+	margin-inline: auto;
 	height: auto;
 	background: gray;
 	position: relative;
@@ -24,7 +29,7 @@
 	border-radius: 1rem;
 	padding: 1rem;
 	box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-	max-width: calc(100vw - 2rem);
+	max-width: calc(100% - 2rem);
 	&.largeLayout {
 		max-width: calc(800px - 2rem);
 	}

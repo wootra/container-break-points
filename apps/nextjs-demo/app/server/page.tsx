@@ -1,7 +1,7 @@
 import React from 'react';
 
-import NavMovementServer from '../../components/NavMovementServer';
+import NavMovementWithInit from '../../components/NavMovementWithInit';
 
 export default function Home() {
-	return <NavMovementServer />;
+	return <NavMovementWithInit />;
 }
