@@ -1,4 +1,7 @@
 # CHANGELOG
+## 2.1.0
+- server side rendering support
+
 ## 2.0.2
 - fix: typescript for multiple boundary was not working. 
 
