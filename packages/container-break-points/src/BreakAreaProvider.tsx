@@ -129,7 +129,7 @@ const BreakAreaProvider = <T extends BreakPointSatisfyObj, K extends keyof T>({
 	init,
 	children,
 }: PropsWithChildren<{ breakPoints: T; init?: InitType<T> }>) => {
-	const dataRef = useRef({}) as MutableRefObject<BreakAreaStates<T, K>>;
+	const dataRef = useRef(init ?? {}) as MutableRefObject<BreakAreaStates<T, K>>;
 
 	const breakPointsRef = useValidateBreakPointsOptions<T, K>(breakPoints, init);
 
