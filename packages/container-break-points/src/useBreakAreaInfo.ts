@@ -2,7 +2,8 @@ import { useCallback, useContext, useEffect, useMemo, useRef, useState } from 'r
 import { UPDATE_BREAK_AREA } from './consts';
 import { getBreakAreaContext } from './BreakAreaProvider';
 import { getMsgOwnerId } from './utils';
-import { BreakAreaInfo, BreakPointSatisfyObj, BreakArea } from './types';
+import { BreakPointSatisfyObj, BreakArea } from './types';
+const emptyArr = [] as readonly string[];
 
 export const useBreakAreaInfo = <
 	T extends BreakPointSatisfyObj,
@@ -12,38 +13,28 @@ export const useBreakAreaInfo = <
 	id: K
 ) => {
 	const { breakPointsRef, providerId, dataRef } = useContext(getBreakAreaContext<T, K>());
-	const [data, setData] = useState({ breakAreas: [], breakSizes: [] } as unknown as BreakAreaInfo<T, K> | undefined);
-	const [current, setCurrent] = useState<string>('');
+
+	const [current, setCurrent] = useState<AREA>((breakPointsRef.current[id] as any)?.init as AREA);
 	const msgId = useMemo(() => getMsgOwnerId(id as string), [id]);
-	const savedCurrRef = useRef('');
+	const savedCurrRef = useRef((breakPointsRef.current[id] as any)?.init);
 	savedCurrRef.current = current;
-	const savedDataRef = useRef<BreakAreaInfo<T, K> | undefined>(data);
 
 	useEffect(() => {
-		if (breakPointsRef.current) {
-			savedDataRef.current = breakPointsRef.current[id];
-			setTimeout(() => {
-				setData(breakPointsRef.current[id]);
-			});
-		}
 		setTimeout(() => {
 			if (dataRef.current?.[id]) {
-				setCurrent(dataRef.current[id]);
+				setCurrent(dataRef.current[id] as AREA);
 			}
 		});
 		const listener: EventListenerOrEventListenerObject = e => {
 			const ev = e as CustomEvent;
 			if (ev.type === UPDATE_BREAK_AREA && ev.detail.id === msgId && ev.detail.providerId === providerId) {
-				if (breakPointsRef.current?.[id] !== savedDataRef.current) {
-					savedDataRef.current = breakPointsRef.current[id];
-					setData(breakPointsRef.current[id]);
-				}
 				if (ev.detail.current !== savedCurrRef.current) {
 					setCurrent(ev.detail.current);
 				}
 			}
 		};
 		window.addEventListener(UPDATE_BREAK_AREA, listener);
+
 		return () => {
 			window.removeEventListener(UPDATE_BREAK_AREA, listener);
 		};
@@ -51,9 +42,10 @@ export const useBreakAreaInfo = <
 
 	const isBreakAt = useCallback(
 		(at: AREA) => {
-			const breakAreas = breakPointsRef.current?.[id]?.breakAreas ?? [];
+			const breakAreas = breakPointsRef.current?.[id]?.breakAreas ?? emptyArr;
+			if (breakAreas.length === 0) return false;
 			if (!breakAreas.includes(at)) {
-				console.error('breakArea in the argument is wrong. it should be one of ', breakAreas);
+				console.error('from argument on isBreakAt is invalid. it should be one of  ', breakAreas);
 				return false;
 			}
 			return current === at;
@@ -63,16 +55,18 @@ export const useBreakAreaInfo = <
 
 	const isBreakBetween = useCallback(
 		(from: AREA, to: AREA) => {
-			const breakAreas = breakPointsRef.current?.[id]?.breakAreas ?? [];
+			const breakAreas = breakPointsRef.current?.[id]?.breakAreas ?? emptyArr;
+			if (breakAreas.length === 0) return false;
+
 			let startIdx = breakAreas.indexOf(from);
 			let endIdx = breakAreas.indexOf(to);
 
 			if (startIdx === -1) {
-				console.error('from argument on useBreakAreaBetween is invalid. it should be one of ', breakAreas);
+				console.error('from argument on isBreakBetween is invalid. it should be one of ', breakAreas);
 				return false;
 			}
 			if (endIdx === -1) {
-				console.error('to argument on useBreakAreaBetween is invalid. it should be one of ', breakAreas);
+				console.error('to argument on isBreakBetween is invalid. it should be one of ', breakAreas);
 				return false;
 			}
 
@@ -90,10 +84,12 @@ export const useBreakAreaInfo = <
 
 	const isBreakUp = useCallback(
 		(from: AREA) => {
-			const breakAreas = breakPointsRef.current?.[id]?.breakAreas ?? [];
+			const breakAreas = breakPointsRef.current?.[id]?.breakAreas ?? emptyArr;
+			if (breakAreas.length === 0) return false;
+
 			const startIdx = breakAreas.indexOf(from);
 			if (startIdx === -1) {
-				console.error('from argument on useBreakAreasDown is invalid. it should be one of ', breakAreas);
+				console.error('from argument on isBreakUp is invalid. it should be one of ', breakAreas);
 				return false;
 			}
 			const currIdx = breakAreas.indexOf(current);
@@ -104,10 +100,11 @@ export const useBreakAreaInfo = <
 
 	const isBreakDown = useCallback(
 		(from: AREA) => {
-			const breakAreas = breakPointsRef.current?.[id]?.breakAreas ?? [];
+			const breakAreas = breakPointsRef.current?.[id]?.breakAreas ?? emptyArr;
+			if (breakAreas.length === 0) return false;
 			let startIdx = breakAreas.indexOf(from);
 			if (startIdx === -1) {
-				console.error('from argument on useBreakAreasDown is invalid. it should be one of ', breakAreas);
+				console.error('from argument on isBreakDown is invalid. it should be one of ', breakAreas);
 				return false;
 			}
 			const currIdx = breakAreas.indexOf(current);
@@ -115,5 +112,5 @@ export const useBreakAreaInfo = <
 		},
 		[id, current]
 	);
-	return { data, current, isBreakAt, isBreakBetween, isBreakUp, isBreakDown };
+	return { data: dataRef.current, current, isBreakAt, isBreakBetween, isBreakUp, isBreakDown };
 };

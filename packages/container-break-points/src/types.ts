@@ -4,11 +4,6 @@ type Immutable<T> = {
 
 export type BreakPointSatisfyObj = Immutable<{ [key: string]: { breakAreas: string[]; breakSizes: number[] } }>;
 
-export type BreakAreasType<T extends Immutable<{ breakAreas: string[]; breakSizes: number[] }>> = {
-	readonly breakAreas: T['breakAreas'] extends readonly string[] ? T['breakAreas'] : readonly string[];
-	readonly breakSizes: T['breakSizes'] extends readonly number[] ? T['breakSizes'] : readonly number[];
-};
-
 export type BreakPtObj<T extends BreakPointSatisfyObj, K extends keyof T> = Pick<T, K>;
 
 export type BreakAreas<T extends BreakPointSatisfyObj, K extends keyof T> = BreakPtObj<
@@ -39,8 +34,9 @@ export type TriggerFunc<T extends BreakPointSatisfyObj, K extends keyof T> = (
 ) => boolean;
 
 export type BreakPointChangeEventData<T extends BreakPointSatisfyObj, K extends keyof T> = {
-	// type: typeof UPDATE_BREAK_AREA;
 	id: K;
 	providerId: string;
 	current: BreakArea<T, K>;
 };
+
+export type InitType<T extends BreakPointSatisfyObj> = { readonly [Key in keyof T]: T[Key]['breakAreas'][number] };

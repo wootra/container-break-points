@@ -12,6 +12,7 @@ export const useBreakAreaAt = <
 	breakArea: AREA
 ) => {
 	const triggerFunc: TriggerFunc<T, K> = useCallback((current, breakAreas) => {
+		if (!breakAreas || breakAreas.length === 0) return false; // not set
 		if (!breakAreas.includes(breakArea)) {
 			console.error('breakArea in the argument is wrong. it should be one of ', breakAreas);
 			return false;

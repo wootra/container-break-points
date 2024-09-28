@@ -1,7 +1,7 @@
 import { useCallback } from 'react';
 
 import { useBreakAreaCommon } from './useBreakAreaCommon';
-import { BreakArea, BreakPointSatisfyObj, BreakPtObj, TriggerFunc } from './types';
+import { BreakArea, BreakPointSatisfyObj, TriggerFunc } from './types';
 
 export const useBreakAreasUp = <
 	T extends BreakPointSatisfyObj,
@@ -15,7 +15,7 @@ export const useBreakAreasUp = <
 		(current, breakAreas) => {
 			let startIdx = breakAreas.indexOf(from);
 			if (startIdx === -1) {
-				console.error('from argument on useBreakAreasDown is invalid. it should be one of ', breakAreas);
+				console.error('from argument on useBreakAreasUp is invalid. it should be one of ', breakAreas);
 				return false;
 			}
 			const currIdx = breakAreas.indexOf(current);

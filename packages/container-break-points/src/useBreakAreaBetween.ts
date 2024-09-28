@@ -1,12 +1,11 @@
 import { useCallback } from 'react';
 
 import { useBreakAreaCommon } from './useBreakAreaCommon';
-import { BreakArea, BreakPointSatisfyObj, BreakPtObj, TriggerFunc } from './types';
+import { BreakArea, BreakPointSatisfyObj, TriggerFunc } from './types';
 
 export const useBreakAreaBetween = <
 	T extends BreakPointSatisfyObj,
 	K extends keyof T,
-	U extends BreakPtObj<T, K> = BreakPtObj<T, K>,
 	AREA extends BreakArea<T, K> = BreakArea<T, K>,
 >(
 	id: K,
@@ -33,6 +32,7 @@ export const useBreakAreaBetween = <
 				startIdx = endIdx;
 				endIdx = temp;
 			}
+
 			const currIdx = breakAreas.indexOf(current);
 			return currIdx >= startIdx && currIdx <= endIdx;
 		},

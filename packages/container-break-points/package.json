@@ -2,20 +2,15 @@
 	"name": "container-breakpoints-react",
 	"version": "2.0.3-0",
 	"private": false,
-	"type": "module",
 	"exports": {
-		"import": {
-			"types": "./dist/index.d.cts",
-			"default": "./dist/index.cjs"
-		},
 		"default": {
-			"types": "./dist/index.d.ts",
+			"types": "./dist/types/index.d.ts",
 			"default": "./dist/index.js"
 		}
 	},
 	"scripts": {
 		"build": "npm run lint && tsup && tsup --config=./tsup.config.dts.ts && tsup --config=./tsup.config.dts.cjs.ts",
-		"rebuild": "rm -rf ./dist;rm -rf ./node_modules/.tmp;pnpm run build",
+		"rebuild": "rm -rf ./dist;rm -rf ./node_modules/.tmp;tsc",
 		"build:types": "tsc --emitDeclarationOnly",
 		"type-check": "tsc --noEmit",
 		"size-limit": "size-limit",
