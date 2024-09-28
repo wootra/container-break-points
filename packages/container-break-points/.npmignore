@@ -1,5 +1,12 @@
 demo
+.turbo
 node_modules
 src
 *.png
 *.mp4
+*.mov
+*.sh
+*.config.ts
+tsconfig.*
+tsup.config.ts
+tagging.js

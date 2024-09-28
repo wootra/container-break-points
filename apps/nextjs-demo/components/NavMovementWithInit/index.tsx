@@ -1,5 +1,5 @@
 'use client';
-import React, { useEffect, useRef, useState } from 'react';
+import React from 'react';
 import { BreakAreaProvider, BreakPointContainer, useBreakAreaInfo, useBreakAreasDown, useBreakAreasUp } from './config';
 import styles from '../../styles/NavMovement.module.css';
 import { PropsWithChildren } from 'react';

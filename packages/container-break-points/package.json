@@ -3,13 +3,17 @@
 	"version": "2.0.3-0",
 	"private": false,
 	"exports": {
+		"import": {
+			"types": "./dist/index.d.mts",
+			"default": "./dist/index.mjs"
+		},
 		"default": {
-			"types": "./dist/types/index.d.ts",
+			"types": "./dist/index.d.ts",
 			"default": "./dist/index.js"
 		}
 	},
 	"scripts": {
-		"build": "npm run lint && tsup && tsup --config=./tsup.config.dts.ts && tsup --config=./tsup.config.dts.cjs.ts",
+		"build": "npm run lint && tsup",
 		"rebuild": "rm -rf ./dist;rm -rf ./node_modules/.tmp;tsc",
 		"build:types": "tsc --emitDeclarationOnly",
 		"type-check": "tsc --noEmit",
