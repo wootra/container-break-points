@@ -13,7 +13,6 @@ import type {
 	BreakPointChangeEventData,
 	BreakPointSatisfyObj,
 	BreakPtObj,
-	InitType,
 } from './types';
 import { UPDATE_BREAK_AREA } from './consts';
 import { getMsgOwnerId } from './utils';
@@ -48,7 +47,7 @@ const getCurrBreakArea = <T extends BreakPointSatisfyObj, K extends keyof T>(
 
 const useValidateBreakPointsOptions = <T extends BreakPointSatisfyObj, K extends keyof T>(
 	breakPoints: T,
-	init?: InitType<T>
+	initWidth?: number
 ) => {
 	const handled = useMemo(() => {
 		const isValid = Object.keys(breakPoints).every(id => {
@@ -71,30 +70,22 @@ const useValidateBreakPointsOptions = <T extends BreakPointSatisfyObj, K extends
 				);
 				return false;
 			}
-			if (init && init[id as keyof T] && !breakAreas.includes(init[id as keyof T])) {
-				console.error(
-					'the breakPoints definition for ' +
-						id +
-						' is not valid. init value should be one of the breakAreas.',
-					'your breakPoints object is:',
-					breakPoints
-				);
-				return false;
-			}
+
 			return true;
 		});
 		if (isValid) {
 			return Object.keys(breakPoints).reduce((obj, key) => {
+				const { breakAreas, breakSizes } = breakPoints[key];
 				obj[key] = {
 					...breakPoints[key],
-					init: init?.[key],
+					init: initWidth === undefined ? undefined : getCurrBreakArea(breakSizes, breakAreas, initWidth),
 				};
 				return obj;
 			}, {} as any) as BreakPtObj<T, K>;
 		} else {
 			return breakPoints as unknown as BreakPtObj<T, K>;
 		}
-	}, [breakPoints, init]);
+	}, [breakPoints, initWidth]);
 	const breakPointsRef = useRef<BreakPtObj<T, K>>(handled);
 
 	return breakPointsRef;
@@ -124,14 +115,24 @@ const sendEventWhenBreakPtChanged = <T extends BreakPointSatisfyObj, K extends k
 	}
 };
 
+const getInitBreakAreas = <T extends BreakPointSatisfyObj>(breakPoints: T, initWidth: number) => {
+	return Object.keys(breakPoints).reduce((obj, key) => {
+		const { breakAreas, breakSizes } = breakPoints[key];
+		obj[key] = getCurrBreakArea(breakSizes, breakAreas, initWidth);
+		return obj;
+	}, {} as any) as BreakAreaStates<T, keyof T>;
+};
+
 const BreakAreaProvider = <T extends BreakPointSatisfyObj, K extends keyof T>({
 	breakPoints,
-	init,
+	initWidth,
 	children,
-}: PropsWithChildren<{ breakPoints: T; init?: InitType<T> }>) => {
-	const dataRef = useRef(init ?? {}) as MutableRefObject<BreakAreaStates<T, K>>;
+}: PropsWithChildren<{ breakPoints: T; initWidth?: number }>) => {
+	const dataRef = useRef(
+		initWidth === undefined ? {} : getInitBreakAreas(breakPoints, initWidth)
+	) as MutableRefObject<BreakAreaStates<T, K>>;
 
-	const breakPointsRef = useValidateBreakPointsOptions<T, K>(breakPoints, init);
+	const breakPointsRef = useValidateBreakPointsOptions<T, K>(breakPoints, initWidth);
 
 	const providerId = useMemo(() => Math.random().toString(36).substring(2, 15), []);
 
@@ -160,11 +161,11 @@ const BreakAreaProvider = <T extends BreakPointSatisfyObj, K extends keyof T>({
 };
 
 const getBreakAreaProvider = <T extends BreakPointSatisfyObj>(breakPoints: T) => {
-	return React.memo(({ children, init }: PropsWithChildren<{ init?: InitType<T> }>) => (
-		<BreakAreaProvider breakPoints={breakPoints} init={init}>
+	return React.memo(({ children, initWidth }: PropsWithChildren<{ initWidth?: number }>) => (
+		<BreakAreaProvider breakPoints={breakPoints} initWidth={initWidth}>
 			{children}
 		</BreakAreaProvider>
-	)) as ({ children }: PropsWithChildren<{ init?: InitType<T> }>) => JSX.Element;
+	)) as ({ children }: PropsWithChildren<{ initWidth?: number }>) => JSX.Element;
 };
 
 export { getBreakAreaProvider };

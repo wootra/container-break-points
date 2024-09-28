@@ -6,7 +6,7 @@ import { PropsWithChildren } from 'react';
 
 function NavMovementServer() {
 	return (
-		<BreakAreaProvider init={{ nav: 'sm', carrousel: 'lg' }}>
+		<BreakAreaProvider initWidth={1024}>
 			<BreakPointContainer id='nav' className={styles.container}>
 				<TopNav />
 				<div className={styles.horizontal}>
