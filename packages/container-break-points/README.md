@@ -5,16 +5,19 @@
 In the concept of responsive design, we usually use @media queries. _BUT!_ 
 when the container's size is NOT changed as the screen size is changed, the responive design easily becomes _PAIN_!! Yeah. Now we have container queries, but Why don't we have javascript controlled container query? 
 
+## Key features
+
 `container-breakpoints-react` acts like container query, but what is better than container query is, 
 
 - actually control rendering based on the size of `container` - HTML structure become simpler!
 - No CSS override is needed. Once you have already responsive flex/grid layout, just use this on top of that!
 - it is easy to use! fully `typescript` support! (your breakpoint name will be auto-completed)
+- server-side rendering is supported! (from 2.1.0). try out with javascript disabled option in chrome! [instruction](https://developer.chrome.com/docs/devtools/javascript/disable)
 
 ## Event driven update
 
-- while `container-breakpoints-react` still use context, it does NOT trigger whole children updates which made us to use state manager like jotai or redux. 
-- the context just share ref objects, and only custom event will trigger each hooks to read the saved data. This design allows multiple update from ResizeObserver without triggering rendering. - it is FAST!!
+- while `container-breakpoints-react` still use context, it does NOT trigger whole children updates. (this is sometimes the reason people start looking for state management system such as jotai or redux). 
+- the context just share ref objects, and rendering in the child component is triggered by CustomEvent. This design allows multiple updates avoiding unnecessary rendering. - it is FAST!!
 
 ## Typescript auto-completion is the core of container-breakpoints-react
 
@@ -61,7 +64,7 @@ In this way, we will have a single name for the each boundary.
 
 ## Use useBreakAreaInfo hook for the basic-easy usage.
 
-To manage multiple areas, you will call a simple hook and it will provide you helper functions. [Demo Code](https://github.com/wootra/container-break-points/blob/main/demo/src/routes/SimpleExample/ProviderWrapper.tsx)
+To manage multiple areas, you will call a simple hook and it will provide you helper functions. [Demo Code](https://github.com/wootra/container-break-points/blob/main/apps/demo/src/components/Test2/config.ts)
 
 ```
 import { createContainerBreakPoint } from 'container-breakpoints-react';
@@ -88,9 +91,9 @@ const {
 ```
 You will see that it ONLY renders only when breakpoint is changed. container-breakpoints-react library uses CustomEvent internally, So context will not trigger expand amount of rendering. It is FAST!!
 
-## Use multiple hooks for more fine grained control.
+## Use multiple hooks for more fine-grained control.
 
-useBreakAreaInfo will allow you to control optional rendering based on the container's size change. It is fast enough, but if you want to control even more fine grained, you can choose one of these hooks instead of using embedded helper functions from useBreakAreaInfo hook.
+`useBreakAreaInfo` will allow you to control optional rendering based on the container's size change. It is fast enough, but if you want to control even more fine-grained, you can choose one of these hooks instead of using embedded helper functions from useBreakAreaInfo hook.
 (all of them returns `boolean` type)
 
 | hook name | args | description |
