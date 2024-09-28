@@ -25,10 +25,9 @@ export const useBreakAreaCommon = <T extends BreakPointSatisfyObj, K extends key
 				const breakAreas = breakPointsRef.current[id]?.breakAreas ?? emptyArr;
 				const current = ev.detail.current;
 				if (!isTriggerable<T, K>(breakAreas, current)) return;
-				const newVal = triggerFunc(current, breakAreas); // === breakArea;
+				const newVal = triggerFunc(current, breakAreas);
 				if (isInBoundaryRef.current !== newVal) {
 					setInBoundary(newVal);
-					// setTimeout(() => setInBoundary(newVal)); // use event queue to remove race condition.
 				}
 			}
 		};

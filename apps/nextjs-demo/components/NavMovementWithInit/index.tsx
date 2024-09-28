@@ -5,29 +5,16 @@ import styles from '../../styles/NavMovement.module.css';
 import { PropsWithChildren } from 'react';
 
 function NavMovementWithInit() {
-	const [width, setWidth] = useState(0);
-	const ref = useRef<HTMLDivElement>(null);
-	useEffect(() => {
-		setTimeout(() => {
-			if (ref.current) {
-				setWidth(ref.current.clientWidth);
-			}
-		}, 5000);
-	}, []);
 	return (
-		<div className={styles.outterContainer} ref={ref}>
-			{width === 0 && <div className={styles.container}> loading for 5sec... </div>}
-
-			{width > 0 && (
-				<BreakAreaProvider initWidth={width - 100}>
-					<BreakPointContainer id='nav' className={styles.container}>
-						<TopNav />
-						<div className={styles.horizontal}>
-							<ContentArea />
-						</div>
-					</BreakPointContainer>
-				</BreakAreaProvider>
-			)}
+		<div className={styles.outterContainer}>
+			<BreakAreaProvider initWidth={1024}>
+				<BreakPointContainer id='nav' className={styles.container}>
+					<TopNav />
+					<div className={styles.horizontal}>
+						<ContentArea />
+					</div>
+				</BreakPointContainer>
+			</BreakAreaProvider>
 		</div>
 	);
 }
@@ -35,7 +22,6 @@ function NavMovementWithInit() {
 const menus = ['Menu1', 'menu2', 'Menu3'];
 const TopNav = () => {
 	const isSmall = useBreakAreasDown('nav', 'sm');
-	console.log('isSmall:', isSmall);
 	return (
 		isSmall && (
 			<div className={styles.topNav}>
@@ -49,7 +35,6 @@ const TopNav = () => {
 
 const LeftNav = () => {
 	const isBig = useBreakAreasUp('nav', 'lg');
-	console.log('isBig:', isBig);
 	return (
 		isBig && (
 			<div className={styles.leftNav}>

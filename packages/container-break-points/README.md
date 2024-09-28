@@ -227,11 +227,32 @@ You can make multiple providers with different breakPoint definitions.
 
 This is useful when you have multiple different pages using client-side router.
 
-## server side support
+## Server Side Rendering(SSR) Support (from 2.1.0)
 
-For the better User experience, you can set 
+`container-breakpoints-react` is using client-side hooks, but considered server-side rendering and the case javascript is disabled.
+In Chrome, you can disable javascript following [this](https://developer.chrome.com/docs/devtools/javascript/disable), then default behavior will not render anything.
+You can set initWidth property to calculate the initial break-point. It will pre-calculate break-points, so even without javascript, server-side will be able to render all the components based on the pre-calculated break-points.
+In the case, you will show the default experience, but once javascript is loaded, you can provide progressive experience.
+here is server-side rendering [example](https://github.com/wootra/container-break-points/blob/main/apps/nextjs-demo/components/NavMovementWithInit/index.tsx).
 
+When you see the code, you will see initWidth property is given as 1024. This size automatically calculate all the break-points under the provider based on the container's size.
 
-## NOTE
+NOTE: even though it supports server-side rendering, you still should add `'use client';` at the top of the file since it is using client-side hooks in the code. 
+Don't worry. It will still work in the server side.
 
-This library is using CustomEvent internally. Also, it leans on memoizations such as useRef, useMemo, useCallback, and useState. 
+```typescript
+function NavMovementWithInit() {
+	return (
+		<div className={styles.outterContainer}>
+			<BreakAreaProvider initWidth={1024}>
+				<BreakPointContainer id='nav' className={styles.container}>
+					<TopNav />
+					<div className={styles.horizontal}>
+						<ContentArea />
+					</div>
+				</BreakPointContainer>
+			</BreakAreaProvider>
+		</div>
+	);
+}
+```

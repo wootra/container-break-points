@@ -1,12 +1,4 @@
-import React, {
-	MutableRefObject,
-	PropsWithChildren,
-	createContext,
-	useCallback,
-	useEffect,
-	useMemo,
-	useRef,
-} from 'react';
+import React, { MutableRefObject, PropsWithChildren, createContext, useCallback, useMemo, useRef } from 'react';
 import type {
 	BreakAreaInfo,
 	BreakAreaStates,
@@ -137,10 +129,8 @@ const BreakAreaProvider = <T extends BreakPointSatisfyObj, K extends keyof T>({
 	const providerId = useMemo(() => Math.random().toString(36).substring(2, 15), []);
 
 	const setBreakArea = useCallback((id: K, width: number) => {
-		const obj = (breakPoints as unknown as BreakPtObj<T, K>)[id];
-		const _breakAreas = obj.breakAreas;
-		const _breakSizes = obj.breakSizes;
-		const current = getCurrBreakArea<T, K>(_breakSizes, _breakAreas, width) as BreakPtObj<
+		const { breakSizes, breakAreas } = (breakPoints as unknown as BreakPtObj<T, K>)[id];
+		const current = getCurrBreakArea<T, K>(breakSizes, breakAreas, width) as BreakPtObj<
 			T,
 			K
 		>[K]['breakAreas'][number];
