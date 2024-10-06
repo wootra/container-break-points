@@ -1,81 +1,29 @@
-# Turborepo starter
+# container-breakpoints-react
 
-This is an official starter Turborepo.
+![log](https://github.com/wootra/container-break-points/blob/main/packages/container-break-points/logo.png?raw=true)
 
-## Using this example
+In the concept of responsive design, we usually use @media queries. _BUT!_ 
+when the container's size is NOT changed as the screen size is changed, the responive design easily becomes _PAIN_!! Yeah. Now we have container queries, but Why don't we have javascript controlled container query? 
 
-Run the following command:
+## Key features
 
-```sh
-npx create-turbo@latest
-```
+`container-breakpoints-react` acts like container query, but what is better than container query is, 
 
-## What's inside?
+- actually control rendering based on the size of `container` - HTML structure become simpler!
+- No CSS override is needed. Once you have already responsive flex/grid layout, just use this on top of that!
+- it is easy to use! fully `typescript` support! (your breakpoint name will be auto-completed)
+- server-side rendering is supported! (from 2.1.0). try out with javascript disabled option in chrome! [instruction](https://developer.chrome.com/docs/devtools/javascript/disable)
 
-This Turborepo includes the following packages/apps:
+## Event driven update
 
-### Apps and Packages
+- while `container-breakpoints-react` still use context, it does NOT trigger whole children updates. (this is sometimes the reason people start looking for state management system such as jotai or redux). 
+- the context just share ref objects, and rendering in the child component is triggered by CustomEvent. This design allows multiple updates avoiding unnecessary rendering. - it is FAST!!
 
-- `docs`: a [Next.js](https://nextjs.org/) app
-- `web`: another [Next.js](https://nextjs.org/) app
-- `@repo/ui`: a stub React component library shared by both `web` and `docs` applications
-- `@repo/eslint-config`: `eslint` configurations (includes `eslint-config-next` and `eslint-config-prettier`)
-- `@repo/typescript-config`: `tsconfig.json`s used throughout the monorepo
+## Typescript auto-completion is the core of container-breakpoints-react
 
-Each package/app is 100% [TypeScript](https://www.typescriptlang.org/).
+I know typescript makes everybody lazy. And I am one of you guys. I don't want to type too much, I don't want to find documentation, just give me auto-completion options!!
 
-### Utilities
+Yes.. I know. So I made it as easy as possible. Try it out. And let me know how it feels like!
 
-This Turborepo has some additional tools already setup for you:
-
-- [TypeScript](https://www.typescriptlang.org/) for static type checking
-- [ESLint](https://eslint.org/) for code linting
-- [Prettier](https://prettier.io) for code formatting
-
-### Build
-
-To build all apps and packages, run the following command:
-
-```
-cd my-turborepo
-pnpm build
-```
-
-### Develop
-
-To develop all apps and packages, run the following command:
-
-```
-cd my-turborepo
-pnpm dev
-```
-
-### Remote Caching
-
-Turborepo can use a technique known as [Remote Caching](https://turbo.build/repo/docs/core-concepts/remote-caching) to share cache artifacts across machines, enabling you to share build caches with your team and CI/CD pipelines.
-
-By default, Turborepo will cache locally. To enable Remote Caching you will need an account with Vercel. If you don't have an account you can [create one](https://vercel.com/signup), then enter the following commands:
-
-```
-cd my-turborepo
-npx turbo login
-```
-
-This will authenticate the Turborepo CLI with your [Vercel account](https://vercel.com/docs/concepts/personal-accounts/overview).
-
-Next, you can link your Turborepo to your Remote Cache by running the following command from the root of your Turborepo:
-
-```
-npx turbo link
-```
-
-## Useful Links
-
-Learn more about the power of Turborepo:
-
-- [Tasks](https://turbo.build/repo/docs/core-concepts/monorepos/running-tasks)
-- [Caching](https://turbo.build/repo/docs/core-concepts/caching)
-- [Remote Caching](https://turbo.build/repo/docs/core-concepts/remote-caching)
-- [Filtering](https://turbo.build/repo/docs/core-concepts/monorepos/filtering)
-- [Configuration Options](https://turbo.build/repo/docs/reference/configuration)
-- [CLI Usage](https://turbo.build/repo/docs/reference/command-line-reference)
+## More info:
+this mono repo provide [package](packages/container-break-points/README.md) and [Examples](apps/demo/README.md)
